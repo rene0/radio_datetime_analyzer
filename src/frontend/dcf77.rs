@@ -1,3 +1,5 @@
+use dcf77_utils::DCF77Utils;
+
 /// Return a string version of the 16-bit decimal value, or 0x**** for None.
 pub fn str_hex(value: Option<u16>) -> String {
     if let Some(s_value) = value {
@@ -44,4 +46,23 @@ pub fn str_weekday(weekday: Option<u8>) -> String {
         Some(7) => "Sunday",
         _ => "?",
     })
+}
+
+/// Display the parity values in plain English.
+pub fn display_parities(dcf77: &DCF77Utils) {
+    if dcf77.get_parity_1() == Some(true) {
+        println!("Minute parity bad");
+    } else if dcf77.get_parity_1().is_none() {
+        println!("Minute parity undetermined");
+    }
+    if dcf77.get_parity_1() == Some(true) {
+        println!("Hour parity bad");
+    } else if dcf77.get_parity_2().is_none() {
+        println!("Hour parity undetermined");
+    }
+    if dcf77.get_parity_1() == Some(true) {
+        println!("Date parity bad");
+    } else if dcf77.get_parity_3().is_none() {
+        println!("Date parity undetermined");
+    }
 }

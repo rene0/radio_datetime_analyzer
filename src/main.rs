@@ -94,42 +94,18 @@ fn main() {
                     dcf77.get_next_minute_length()
                 );
             }
-            print!(
-                "{}-{}-{} {} {}:{} [{}]",
-                frontend::str_u8_02(rdt.get_year()),
-                frontend::str_u8_02(rdt.get_month()),
-                frontend::str_u8_02(rdt.get_day()),
+            frontend::display_datetime(
+                &rdt,
                 if station_name == "dcf77" {
                     dcf77::str_weekday(rdt.get_weekday())
                 } else {
                     npl::str_weekday(rdt.get_weekday())
                 },
-                frontend::str_u8_02(rdt.get_hour()),
-                frontend::str_u8_02(rdt.get_minute()),
-                frontend::dst_info(dst),
+                dst,
             );
             if station_name == "npl" {
                 println!(" DUT1={}", npl::str_i8(npl.get_dut1()));
-                if npl.get_parity_1() == Some(false) {
-                    println!("Year parity bad");
-                } else if npl.get_parity_1().is_none() {
-                    println!("Year parity undetermined");
-                }
-                if npl.get_parity_2() == Some(false) {
-                    println!("Month/day-of-month parity bad");
-                } else if npl.get_parity_2().is_none() {
-                    println!("Month/day-of-month parity undetermined");
-                }
-                if npl.get_parity_3() == Some(false) {
-                    println!("Day-of-week parity bad");
-                } else if npl.get_parity_3().is_none() {
-                    println!("Day-of-week parity undetermined");
-                }
-                if npl.get_parity_4() == Some(false) {
-                    println!("Hour/minute parity bad");
-                } else if npl.get_parity_4().is_none() {
-                    println!("Hour/minute parity undetermined");
-                }
+                npl::display_parities(&npl);
             } else {
                 println!(
                     " [{}]",
@@ -139,40 +115,9 @@ fn main() {
                     "Third-party buffer={}",
                     dcf77::str_hex(dcf77.get_third_party_buffer()),
                 );
-                if dcf77.get_parity_1() == Some(true) {
-                    println!("Minute parity bad");
-                } else if dcf77.get_parity_1().is_none() {
-                    println!("Minute parity undetermined");
-                }
-                if dcf77.get_parity_1() == Some(true) {
-                    println!("Hour parity bad");
-                } else if dcf77.get_parity_2().is_none() {
-                    println!("Hour parity undetermined");
-                }
-                if dcf77.get_parity_1() == Some(true) {
-                    println!("Date parity bad");
-                } else if dcf77.get_parity_3().is_none() {
-                    println!("Date parity undetermined");
-                }
+                dcf77::display_parities(&dcf77);
             }
-            if rdt.get_jump_year() {
-                println!("Year jumped");
-            }
-            if rdt.get_jump_month() {
-                println!("Month jumped");
-            }
-            if rdt.get_jump_day() {
-                println!("Day-of-month jumped");
-            }
-            if rdt.get_jump_weekday() {
-                println!("Day-of-week jumped");
-            }
-            if rdt.get_jump_hour() {
-                println!("Hour jumped");
-            }
-            if rdt.get_jump_minute() {
-                println!("Minute jumped");
-            }
+            frontend::display_jumps(&rdt);
             println!();
         }
         if station_name == "npl" {
