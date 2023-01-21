@@ -1,112 +1,10 @@
+use crate::frontend::{dcf77, npl};
 use dcf77_utils::DCF77Utils;
 use npl_utils::NPLUtils;
 use radio_datetime_utils::RadioDateTimeUtils;
 use std::{env, fs};
 
-/// Return a string version of the given value with leading 0, truncated to two digits or ** for None.
-fn str_u8_02(value: Option<u8>) -> String {
-    if let Some(s_value) = value {
-        format!("{:>02}", s_value)
-    } else {
-        String::from("**")
-    }
-}
-
-/// Return a string representation of the given value or ? for None.
-fn str_i8(value: Option<i8>) -> String {
-    if let Some(s_value) = value {
-        format!("{}", s_value)
-    } else {
-        String::from("?")
-    }
-}
-
-/// Return a string version of the 16-bit decimal value, or 0x**** for None.
-fn str_hex(value: Option<u16>) -> String {
-    if let Some(s_value) = value {
-        format!("{:>#04x}", s_value)
-    } else {
-        String::from("0x****")
-    }
-}
-
-/// Describe the leap second parameters in plain English.
-fn leap_second_info(leap_second: Option<u8>, is_one: Option<bool>) -> String {
-    let mut s = String::from("");
-    if let Some(s_leap) = leap_second {
-        if s_leap & radio_datetime_utils::LEAP_ANNOUNCED != 0 {
-            s += "announced";
-        }
-        if s_leap & radio_datetime_utils::LEAP_PROCESSED != 0 {
-            s += "processed";
-            if is_one.unwrap() {
-                s += ",one";
-            }
-        }
-        if s_leap & radio_datetime_utils::LEAP_MISSING != 0 {
-            s += "missing";
-        }
-    }
-    s
-}
-
-/// Describe the dst parameter in plain English.
-fn dst_info(dst: Option<u8>) -> String {
-    let mut s = String::from("");
-    if let Some(s_dst) = dst {
-        if s_dst & radio_datetime_utils::DST_ANNOUNCED != 0 {
-            s += "announced,";
-        }
-        if s_dst & radio_datetime_utils::DST_PROCESSED != 0 {
-            s += "processed,";
-        }
-        if s_dst & radio_datetime_utils::DST_JUMP != 0 {
-            s += "jump,";
-        }
-        if s_dst & radio_datetime_utils::DST_SUMMER != 0 {
-            s += "summer";
-        } else {
-            s += "winter";
-        }
-    }
-    s
-}
-
-/// Return a textual representation of the weekday, Sunday-Saturday or ? for None.
-fn str_weekday(station_name: &String, weekday: Option<u8>) -> String {
-    String::from(match weekday {
-        Some(0) => {
-            if station_name == "npl" {
-                "Sunday"
-            } else {
-                "?"
-            }
-        }
-        Some(1) => "Monday",
-        Some(2) => "Tuesday",
-        Some(3) => "Wednesday",
-        Some(4) => "Thursday",
-        Some(5) => "Friday",
-        Some(6) => "Saturday",
-        Some(7) => {
-            if station_name == "dcf77" {
-                "Sunday"
-            } else {
-                "?"
-            }
-        }
-        _ => "?",
-    })
-}
-
-/// Determine if we should print a space before this bit (pair).
-fn is_space_bit(station_name: &String, second: u8) -> bool {
-    if station_name == "dcf77" {
-        [1, 15, 16, 19, 20, 21, 28, 29, 35, 36, 42, 45, 50, 58, 59].contains(&second)
-    } else {
-        [1, 9, 17, 25, 30, 36, 39, 45, 52].contains(&second)
-    }
-}
+mod frontend;
 
 fn main() {
     let station_name = env::args()
@@ -132,13 +30,18 @@ fn main() {
         {
             continue;
         }
-        let second = if station_name == "dcf77" {
-            dcf77.get_second()
+
+        let second;
+        if station_name == "dcf77" {
+            second = dcf77.get_second();
+            if dcf77::is_space_bit(second) {
+                print!(" ");
+            }
         } else {
-            npl.get_second()
-        };
-        if is_space_bit(&station_name, second) {
-            print!(" ");
+            second = npl.get_second();
+            if npl::is_space_bit(second) {
+                print!(" ");
+            }
         }
         print!("{}", c);
         match c {
@@ -218,16 +121,20 @@ fn main() {
                 }
                 print!(
                     "{}-{}-{} {} {}:{} [{}]",
-                    str_u8_02(rdt.get_year()),
-                    str_u8_02(rdt.get_month()),
-                    str_u8_02(rdt.get_day()),
-                    str_weekday(&station_name, rdt.get_weekday()),
-                    str_u8_02(rdt.get_hour()),
-                    str_u8_02(rdt.get_minute()),
-                    dst_info(dst),
+                    frontend::str_u8_02(rdt.get_year()),
+                    frontend::str_u8_02(rdt.get_month()),
+                    frontend::str_u8_02(rdt.get_day()),
+                    if station_name == "dcf77" {
+                        dcf77::str_weekday(rdt.get_weekday())
+                    } else {
+                        npl::str_weekday(rdt.get_weekday())
+                    },
+                    frontend::str_u8_02(rdt.get_hour()),
+                    frontend::str_u8_02(rdt.get_minute()),
+                    frontend::dst_info(dst),
                 );
                 if station_name == "npl" {
-                    println!(" DUT1={}", str_i8(npl.get_dut1()));
+                    println!(" DUT1={}", npl::str_i8(npl.get_dut1()));
                     if npl.get_parity_1() == Some(false) {
                         println!("Year parity bad");
                     } else if npl.get_parity_1().is_none() {
@@ -251,11 +158,14 @@ fn main() {
                 } else {
                     println!(
                         " [{}]",
-                        leap_second_info(rdt.get_leap_second(), dcf77.get_leap_second_is_one())
+                        dcf77::leap_second_info(
+                            rdt.get_leap_second(),
+                            dcf77.get_leap_second_is_one()
+                        )
                     );
                     println!(
                         "Third-party buffer={}",
-                        str_hex(dcf77.get_third_party_buffer()),
+                        dcf77::str_hex(dcf77.get_third_party_buffer()),
                     );
                     if dcf77.get_parity_1() == Some(true) {
                         println!("Minute parity bad");
