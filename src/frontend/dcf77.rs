@@ -1,5 +1,32 @@
 use dcf77_utils::DCF77Utils;
 
+/// Append the given bit to the current DCF77 structure
+///
+/// # Arguments
+/// `dcf77` - the structure to append the bit to
+/// `c` - the bit to add
+pub fn append_bit(dcf77: &mut DCF77Utils, c: char) {
+    if c != '\n' {
+        dcf77.set_current_bit(match c {
+            '0' => Some(false),
+            '1' => Some(true),
+            _ => None, // always '_' in this case, but match must be exhaustive
+        });
+    }
+}
+
+/// Display the current bit (or the EOM newline), optionally prefixed by a space.
+///
+/// # Arguments
+/// * `dcf77` - DCF77 structure containing the second counter
+/// * `c` the bit to display
+pub fn display_bit(dcf77: &DCF77Utils, c: char) {
+    if is_space_bit(dcf77.get_second()) {
+        print!(" ");
+    }
+    print!("{}", c);
+}
+
 /// Return a string version of the 16-bit decimal value, or 0x**** for None.
 ///
 /// # Arguments

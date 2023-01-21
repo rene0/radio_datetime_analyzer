@@ -1,5 +1,37 @@
 use npl_utils::NPLUtils;
 
+/// Append the given bit pair to the current NPL structure
+///
+/// # Arguments
+/// `npl` - the structure to append the bit pair to
+/// `c` - the bit pair to add
+pub fn append_bits(npl: &mut NPLUtils, c: char) {
+    if c != '\n' {
+        npl.set_current_bit_a(match c {
+            '0' | '2' => Some(false),
+            '1' | '3' => Some(true),
+            _ => None, // '_' or '4' (the 500ms long BOM marker)
+        });
+        npl.set_current_bit_b(match c {
+            '0' | '1' => Some(false),
+            '2' | '3' => Some(true),
+            _ => None, // '_' or '4' (the 500ms long BOM marker)
+        });
+    }
+}
+
+/// Display the current bit pair (or the EOM newline), optionally prefixed by a space.
+///
+/// # Arguments
+/// * `npl` - NPL structure containing the second counter
+/// * `c` the bit pair to display
+pub fn display_bits(npl: &NPLUtils, c: char) {
+    if is_space_bit(npl.get_second()) {
+        print!(" ");
+    }
+    print!("{}", c);
+}
+
 /// Decide if a space should be printed in front of the bit pair contained in this second.
 ///
 /// # Arguments

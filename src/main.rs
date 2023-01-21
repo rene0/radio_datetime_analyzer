@@ -32,38 +32,14 @@ fn main() {
             continue;
         }
 
-        let second;
         if station_name == "dcf77" {
-            second = dcf77.get_second();
-            if dcf77::is_space_bit(second) {
-                print!(" ");
-            }
-            if c != '\n' {
-                dcf77.set_current_bit(match c {
-                    '0' => Some(false),
-                    '1' => Some(true),
-                    _ => None, // always '_' in this case, but match must be exhaustive
-                });
-            }
-        } else if station_name == "npl" {
-            second = npl.get_second();
-            if npl::is_space_bit(second) {
-                print!(" ");
-            }
-            if c != '\n' {
-                npl.set_current_bit_a(match c {
-                    '0' | '2' => Some(false),
-                    '1' | '3' => Some(true),
-                    _ => None, // '_' or '4' (the 500ms long BOM marker)
-                });
-                npl.set_current_bit_b(match c {
-                    '0' | '1' => Some(false),
-                    '2' | '3' => Some(true),
-                    _ => None, // '_' or '4' (the 500ms long BOM marker)
-                });
-            }
+            dcf77::append_bit(&mut dcf77, c);
+            dcf77::display_bit(&dcf77, c);
         }
-        print!("{}", c);
+        if station_name == "npl" {
+            npl::append_bits(&mut npl, c);
+            npl::display_bits(&npl, c);
+        }
         if c == '\n' {
             let rdt: RadioDateTimeUtils;
             let dst: Option<u8>;
