@@ -67,21 +67,11 @@ fn main() {
         if c == '\n' {
             let rdt: RadioDateTimeUtils;
             let dst: Option<u8>;
-            if station_name == "npl" {
-                npl.decode_time();
-                npl.force_new_minute();
-                rdt = npl.get_radio_datetime();
-                dst = rdt.get_dst();
-                println!(
-                    "first_minute={} second={} minute_length={}",
-                    npl.get_first_minute(),
-                    npl.get_second(),
-                    npl.get_minute_length()
-                );
-            } else {
+            if station_name == "dcf77" {
                 // force-feed the missing EOM bit
                 dcf77.set_current_bit(None);
                 dcf77.increase_second();
+
                 dcf77.decode_time();
                 dcf77.force_new_minute();
                 rdt = dcf77.get_radio_datetime();
@@ -93,6 +83,17 @@ fn main() {
                     dcf77.get_this_minute_length(),
                     dcf77.get_next_minute_length()
                 );
+            } else {
+                npl.decode_time();
+                npl.force_new_minute();
+                rdt = npl.get_radio_datetime();
+                dst = rdt.get_dst();
+                println!(
+                    "first_minute={} second={} minute_length={}",
+                    npl.get_first_minute(),
+                    npl.get_second(),
+                    npl.get_minute_length()
+                );
             }
             frontend::display_datetime(
                 &rdt,
@@ -103,10 +104,7 @@ fn main() {
                 },
                 dst,
             );
-            if station_name == "npl" {
-                println!(" DUT1={}", npl::str_i8(npl.get_dut1()));
-                npl::display_parities(&npl);
-            } else {
+            if station_name == "dcf77" {
                 println!(
                     " [{}]",
                     dcf77::leap_second_info(rdt.get_leap_second(), dcf77.get_leap_second_is_one())
@@ -117,13 +115,18 @@ fn main() {
                 );
                 dcf77::display_parities(&dcf77);
             }
+            if station_name == "npl" {
+                println!(" DUT1={}", npl::str_i8(npl.get_dut1()));
+                npl::display_parities(&npl);
+            }
             frontend::display_jumps(&rdt);
             println!();
         }
+        if station_name == "dcf77" {
+            dcf77.increase_second();
+        }
         if station_name == "npl" {
             npl.increase_second();
-        } else {
-            dcf77.increase_second();
         }
     }
 }
