@@ -26,18 +26,10 @@ pub fn append_bits(npl: &mut NPLUtils, c: char) {
 /// * `npl` - NPL structure containing the second counter
 /// * `c` the bit pair to display
 pub fn display_bits(npl: &NPLUtils, c: char) {
-    if is_space_bit(npl.get_second()) {
+    if [1, 9, 17, 25, 30, 36, 39, 45, 52].contains(&npl.get_second()) {
         print!(" ");
     }
     print!("{}", c);
-}
-
-/// Decide if a space should be printed in front of the bit pair contained in this second.
-///
-/// # Arguments
-/// * `second` - current second
-pub fn is_space_bit(second: u8) -> bool {
-    [1, 9, 17, 25, 30, 36, 39, 45, 52].contains(&second)
 }
 
 /// Return a textual representation of the weekday, Sunday-Saturday or ? for None.

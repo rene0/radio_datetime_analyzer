@@ -21,7 +21,7 @@ pub fn append_bit(dcf77: &mut DCF77Utils, c: char) {
 /// * `dcf77` - DCF77 structure containing the second counter
 /// * `c` the bit to display
 pub fn display_bit(dcf77: &DCF77Utils, c: char) {
-    if is_space_bit(dcf77.get_second()) {
+    if [1, 15, 16, 19, 20, 21, 28, 29, 35, 36, 42, 45, 50, 58, 59].contains(&dcf77.get_second()) {
         print!(" ");
     }
     print!("{}", c);
@@ -61,14 +61,6 @@ pub fn leap_second_info(leap_second: Option<u8>, is_one: Option<bool>) -> String
         }
     }
     s
-}
-
-/// Decide if a space should be printed in front of this bit contained in this second.
-///
-/// # Arguments
-/// * `second` - current second
-pub fn is_space_bit(second: u8) -> bool {
-    [1, 15, 16, 19, 20, 21, 28, 29, 35, 36, 42, 45, 50, 58, 59].contains(&second)
 }
 
 /// Return a textual representation of the weekday, Sunday-Saturday or ? for None.
