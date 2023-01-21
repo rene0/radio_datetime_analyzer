@@ -1,11 +1,17 @@
 use npl_utils::NPLUtils;
 
-/// Determine if we should print a space before this bit (pair).
+/// Decide if a space should be printed in front of the bit pair contained in this second.
+///
+/// # Arguments
+/// * `second` - current second
 pub fn is_space_bit(second: u8) -> bool {
     [1, 9, 17, 25, 30, 36, 39, 45, 52].contains(&second)
 }
 
 /// Return a textual representation of the weekday, Sunday-Saturday or ? for None.
+///
+/// # Arguments
+/// * `weekday` - optional weekday to stringify
 pub fn str_weekday(weekday: Option<u8>) -> String {
     String::from(match weekday {
         Some(0) => "Sunday",
@@ -20,6 +26,9 @@ pub fn str_weekday(weekday: Option<u8>) -> String {
 }
 
 /// Return a string representation of the given value or ? for None.
+///
+/// # Arguments
+/// * `value` - value to stringify
 pub fn str_i8(value: Option<i8>) -> String {
     if let Some(s_value) = value {
         format!("{}", s_value)
@@ -29,6 +38,9 @@ pub fn str_i8(value: Option<i8>) -> String {
 }
 
 /// Display the parity values in English.
+///
+/// # Arguments
+/// * `npl` - structure holding the currently decoded NPL data
 pub fn display_parities(npl: &NPLUtils) {
     if npl.get_parity_1() == Some(false) {
         println!("Year parity bad");
