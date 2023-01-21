@@ -25,9 +25,10 @@ fn main() {
         .unwrap_or_else(|_| panic!("Could not read '{}' !", &filename))
         .chars()
     {
-        if (station_name == "dcf77" && !['0', '1', '_', '\n'].contains(&c))
-            || !['0', '1', '2', '3', '4', '_', '\n'].contains(&c)
-        {
+        if station_name == "dcf77" && !['0', '1', '_', '\n'].contains(&c) {
+            continue;
+        }
+        if station_name == "npl" && !['0', '1', '2', '3', '4', '_', '\n'].contains(&c) {
             continue;
         }
 
