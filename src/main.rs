@@ -111,7 +111,7 @@ fn main() {
                 );
                 println!(
                     "Third-party buffer={}",
-                    dcf77::str_hex(dcf77.get_third_party_buffer()),
+                    dcf77::str_hex(dcf77.get_third_party_buffer())
                 );
                 dcf77::display_parities(&dcf77);
             }
