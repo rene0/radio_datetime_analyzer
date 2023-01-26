@@ -24,7 +24,7 @@ pub fn display_bit(dcf77: &DCF77Utils, c: char) {
     if [1, 15, 16, 19, 20, 21, 28, 29, 35, 36, 42, 45, 50, 58, 59].contains(&dcf77.get_second()) {
         print!(" ");
     }
-    print!("{}", c);
+    print!("{c}");
 }
 
 /// Return a string version of the 16-bit decimal value, or 0x**** for None.
@@ -33,7 +33,7 @@ pub fn display_bit(dcf77: &DCF77Utils, c: char) {
 /// * `value` - the value to stringify, if any.
 pub fn str_hex(value: Option<u16>) -> String {
     if let Some(s_value) = value {
-        format!("{:>#04x}", s_value)
+        format!("{s_value:>#04x}")
     } else {
         String::from("0x****")
     }

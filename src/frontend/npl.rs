@@ -29,7 +29,7 @@ pub fn display_bits(npl: &NPLUtils, c: char) {
     if [1, 9, 17, 25, 30, 36, 39, 45, 52].contains(&npl.get_second()) {
         print!(" ");
     }
-    print!("{}", c);
+    print!("{c}");
 }
 
 /// Return a textual representation of the weekday, Sunday-Saturday or ? for None.
@@ -55,7 +55,7 @@ pub fn str_weekday(weekday: Option<u8>) -> String {
 /// * `value` - value to stringify
 pub fn str_i8(value: Option<i8>) -> String {
     if let Some(s_value) = value {
-        format!("{}", s_value)
+        format!("{s_value}")
     } else {
         String::from("?")
     }

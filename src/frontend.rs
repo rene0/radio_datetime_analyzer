@@ -9,7 +9,7 @@ pub mod npl;
 /// * `value` - value to stringify
 pub fn str_u8_02(value: Option<u8>) -> String {
     if let Some(s_value) = value {
-        format!("{:>02}", s_value)
+        format!("{s_value:>02}")
     } else {
         String::from("**")
     }
