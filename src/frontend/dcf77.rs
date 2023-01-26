@@ -33,7 +33,7 @@ pub fn display_bit(dcf77: &DCF77Utils, c: char) {
 /// * `value` - the value to stringify, if any.
 pub fn str_hex(value: Option<u16>) -> String {
     if let Some(s_value) = value {
-        format!("{s_value:>#04x}")
+        format!("0x{s_value:>04x}")
     } else {
         String::from("0x****")
     }
