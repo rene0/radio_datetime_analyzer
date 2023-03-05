@@ -93,6 +93,9 @@ fn main() {
             }
             if station_name == "npl" {
                 println!(" DUT1={}", npl::str_i8(npl.get_dut1()));
+                if !npl.end_of_minute_marker_present(false) {
+                    println!("End-of-minute marker absent");
+                }
                 npl::display_parities(&npl);
             }
             frontend::display_jumps(&rdt);
