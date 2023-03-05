@@ -25,6 +25,10 @@ pub fn append_bits(npl: &mut NPLUtils, c: char) {
 /// # Arguments
 /// * `npl` - NPL structure containing the second counter
 /// * `c` the bit pair to display
+///
+/// We should adjust for positive and negative leap seconds but that requires the
+/// current EOM marker offset to be known in advance (i.e. first read the entire minute, then
+/// display it).
 pub fn display_bits(npl: &NPLUtils, c: char) {
     if [1, 9, 17, 25, 30, 36, 39, 45, 52].contains(&npl.get_second()) {
         print!(" ");
