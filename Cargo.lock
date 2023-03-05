@@ -4,18 +4,18 @@ version = 3
 
 [[package]]
 name = "dcf77_utils"
-version = "0.4.0"
+version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5e542fd73f0f5a36532ff0949a22c5b943ba4eab1057e3752279d8b8095efa54"
+checksum = "824d8617af2b569a01b5498c76efa9dca0acba748d4b339d5fbe3c7e28cb4cfb"
 dependencies = [
  "radio_datetime_utils",
 ]
 
 [[package]]
 name = "npl_utils"
-version = "0.2.1"
+version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e3310b0e14da86e0ece8548064e0186e67a90e0847fe3be940d5d3a838430e1e"
+checksum = "e668fae4b37333a2645769f91eb11e3d4f629cf839ad37138439f92d050c7889"
 dependencies = [
  "radio_datetime_utils",
 ]
@@ -31,6 +31,6 @@ dependencies = [
 
 [[package]]
 name = "radio_datetime_utils"
-version = "0.4.2"
+version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7b97b1d5411bc28bbaa1848797d912cc1de368f9baf23a6babd86e7acbc392d6"
+checksum = "95cdd3b90edcd89072979b07d58b98573e6042d7d79f9b3c43aa14ceea645d6e"
