@@ -26,6 +26,7 @@ fn main() {
     }
     let mut dcf77 = DCF77Utils::default();
     let mut npl = NPLUtils::default();
+    let mut npl_buffer = [' '; 62]; // ideally this 62 is npl::BIT_BUFFER_SIZE but that is private
     let buffer = buffer.unwrap();
     for c in buffer.chars() {
         if station_name == "dcf77" && !['0', '1', '_', '\n'].contains(&c) {
@@ -40,8 +41,7 @@ fn main() {
             dcf77::display_bit(&dcf77, c);
         }
         if station_name == "npl" {
-            npl::append_bits(&mut npl, c);
-            npl::display_bits(&npl, c);
+            npl::append_bits(&mut npl, c, &mut npl_buffer);
         }
         if c == '\n' {
             let rdt: RadioDateTimeUtils;
@@ -63,6 +63,7 @@ fn main() {
                     dcf77.get_next_minute_length()
                 );
             } else {
+                npl::display_bits(&npl_buffer, npl.get_minute_length());
                 npl.decode_time();
                 npl.force_new_minute();
                 rdt = npl.get_radio_datetime();

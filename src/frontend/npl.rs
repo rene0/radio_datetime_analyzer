@@ -1,11 +1,13 @@
 use npl_utils::NPLUtils;
+use std::cmp::Ordering;
 
-/// Append the given bit pair to the current NPL structure
+/// Append the given bit pair to the current NPL structure and to the given buffer for later displaying
 ///
 /// # Arguments
-/// `npl` - the structure to append the bit pair to
-/// `c` - the bit pair to add
-pub fn append_bits(npl: &mut NPLUtils, c: char) {
+/// * `npl` - the structure to append the bit pair to
+/// * `c` - the bit pair to add
+/// * `buffer` - buffer storing the bits for later displaying
+pub fn append_bits(npl: &mut NPLUtils, c: char, buffer: &mut [char]) {
     if c != '\n' {
         npl.set_current_bit_a(match c {
             '0' | '2' => Some(false),
@@ -18,22 +20,41 @@ pub fn append_bits(npl: &mut NPLUtils, c: char) {
             _ => None, // '_' or '4' (the 500ms long BOM marker)
         });
     }
+    buffer[npl.get_second() as usize] = c;
 }
 
 /// Display the current bit pair (or the EOM newline), optionally prefixed by a space.
 ///
 /// # Arguments
-/// * `npl` - NPL structure containing the second counter
-/// * `c` the bit pair to display
-///
-/// We should adjust for positive and negative leap seconds but that requires the
-/// current EOM marker offset to be known in advance (i.e. first read the entire minute, then
-/// display it).
-pub fn display_bits(npl: &NPLUtils, c: char) {
-    if [1, 9, 17, 25, 30, 36, 39, 45, 52].contains(&npl.get_second()) {
-        print!(" ");
+/// * `buffer` - the buffer to display
+/// * `minute_length` - the number of bit pairs in this minute
+pub fn display_bits(buffer: &[char], minute_length: u8) {
+    let offset = match 60.cmp(&minute_length) {
+        Ordering::Less => 1,
+        Ordering::Equal => 0,
+        Ordering::Greater => -1,
+    };
+    for (idx, c) in buffer.iter().enumerate() {
+        if [
+            1,
+            9,
+            17 + offset,
+            25 + offset,
+            30 + offset,
+            36 + offset,
+            39 + offset,
+            45 + offset,
+            52 + offset,
+        ]
+        .contains(&(idx as isize))
+        {
+            print!(" ");
+        }
+        print!("{c}");
+        if idx == minute_length as usize {
+            break;
+        }
     }
-    print!("{c}");
 }
 
 /// Return a textual representation of the weekday, Sunday-Saturday or ? for None.
