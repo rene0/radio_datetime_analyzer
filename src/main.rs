@@ -7,24 +7,27 @@ use std::{env, fs};
 mod frontend;
 
 fn main() {
-    let station_name = env::args()
-        .nth(1)
-        .expect("Expected one log type to be given.")
-        .to_lowercase();
-    if station_name != "dcf77" && station_name != "npl" {
-        eprintln!("Log type must be dcf77 or npl");
+    let mut cmd_args = env::args();
+    let program_name = cmd_args.next();
+    if cmd_args.len() != 2 {
+        eprintln!("Usage: {} logtype logfile", program_name.unwrap());
         return;
     }
-    let filename = env::args()
-        .nth(2)
-        .expect("Expected one filename to analyze.");
+    let station_name = cmd_args.next().unwrap().to_lowercase();
+    if station_name != "dcf77" && station_name != "npl" {
+        eprintln!("logtype must be 'dcf77' or 'npl' but is '{station_name}'");
+        return;
+    }
+    let filename = cmd_args.next().unwrap();
+    let buffer = fs::read_to_string(&filename);
+    if let Err(ref s_error) = buffer {
+        eprintln!("Could not read file '{}' : {s_error}", &filename);
+        return;
+    }
     let mut dcf77 = DCF77Utils::default();
     let mut npl = NPLUtils::default();
-    let buffer = fs::read_to_string(&filename);
-    for c in buffer
-        .unwrap_or_else(|_| panic!("Could not read '{}' !", &filename))
-        .chars()
-    {
+    let buffer = buffer.unwrap();
+    for c in buffer.chars() {
         if station_name == "dcf77" && !['0', '1', '_', '\n'].contains(&c) {
             continue;
         }
