@@ -23,12 +23,13 @@ pub fn append_bits(npl: &mut NPLUtils, c: char, buffer: &mut [char]) {
     buffer[npl.get_second() as usize] = c;
 }
 
-/// Display the current bit pair (or the EOM newline), optionally prefixed by a space.
+/// Return a string version of the current bit pair (or the EOM newline), optionally prefixed by a space.
 ///
 /// # Arguments
-/// * `buffer` - the buffer to display
+/// * `buffer` - the buffer to stringify
 /// * `minute_length` - the number of bit pairs in this minute
-pub fn display_bits(buffer: &[char], minute_length: u8) {
+pub fn str_bits(buffer: &[char], minute_length: u8) -> String {
+    let mut bits = String::from("");
     let offset = match 60.cmp(&minute_length) {
         Ordering::Less => 1,
         Ordering::Equal => 0,
@@ -48,13 +49,14 @@ pub fn display_bits(buffer: &[char], minute_length: u8) {
         ]
         .contains(&(idx as isize))
         {
-            print!(" ");
+            bits.push(' ');
         }
-        print!("{c}");
+        bits.push(*c);
         if idx == minute_length as usize {
             break;
         }
     }
+    bits
 }
 
 /// Return a textual representation of the weekday, Sunday-Saturday or ? for None.
@@ -86,29 +88,31 @@ pub fn str_i8(value: Option<i8>) -> String {
     }
 }
 
-/// Display the parity values in English.
+/// Return a vector containing the parity values in English.
 ///
 /// # Arguments
 /// * `npl` - structure holding the currently decoded NPL data
-pub fn display_parities(npl: &NPLUtils) {
+pub fn str_parities(npl: &NPLUtils) -> Vec<&str> {
+    let mut parities = Vec::new();
     if npl.get_parity_1() == Some(false) {
-        println!("Year parity bad");
+        parities.push("Year parity bad");
     } else if npl.get_parity_1().is_none() {
-        println!("Year parity undetermined");
+        parities.push("Year parity undetermined");
     }
     if npl.get_parity_2() == Some(false) {
-        println!("Month/day-of-month parity bad");
+        parities.push("Month/day-of-month parity bad");
     } else if npl.get_parity_2().is_none() {
-        println!("Month/day-of-month parity undetermined");
+        parities.push("Month/day-of-month parity undetermined");
     }
     if npl.get_parity_3() == Some(false) {
-        println!("Day-of-week parity bad");
+        parities.push("Day-of-week parity bad");
     } else if npl.get_parity_3().is_none() {
-        println!("Day-of-week parity undetermined");
+        parities.push("Day-of-week parity undetermined");
     }
     if npl.get_parity_4() == Some(false) {
-        println!("Hour/minute parity bad");
+        parities.push("Hour/minute parity bad");
     } else if npl.get_parity_4().is_none() {
-        println!("Hour/minute parity undetermined");
+        parities.push("Hour/minute parity undetermined");
     }
+    parities
 }

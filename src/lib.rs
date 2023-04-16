@@ -21,7 +21,7 @@ pub fn analyze_rdt_buffer(station_name: String, buffer: io::Result<String>) {
 
         if station_name == "dcf77" {
             dcf77::append_bit(&mut dcf77, c);
-            dcf77::display_bit(&dcf77, c);
+            print!("{}", dcf77::str_bit(&dcf77, c));
         }
         if station_name == "npl" {
             npl::append_bits(&mut npl, c, &mut npl_buffer);
@@ -46,7 +46,7 @@ pub fn analyze_rdt_buffer(station_name: String, buffer: io::Result<String>) {
                     dcf77.get_next_minute_length()
                 );
             } else {
-                npl::display_bits(&npl_buffer, npl.get_minute_length());
+                print!("{}", npl::str_bits(&npl_buffer, npl.get_minute_length()));
                 npl.decode_time();
                 npl.force_new_minute();
                 rdt = npl.get_radio_datetime();
@@ -76,14 +76,18 @@ pub fn analyze_rdt_buffer(station_name: String, buffer: io::Result<String>) {
                     "Third-party buffer={}",
                     dcf77::str_hex(dcf77.get_third_party_buffer())
                 );
-                dcf77::display_parities(&dcf77);
+                for parity in dcf77::str_parities(&dcf77) {
+                    println!("{parity}")
+                }
             }
             if station_name == "npl" {
                 println!(" DUT1={}", npl::str_i8(npl.get_dut1()));
                 if !npl.end_of_minute_marker_present(false) {
                     println!("End-of-minute marker absent");
                 }
-                npl::display_parities(&npl);
+                for parity in npl::str_parities(&npl) {
+                    println!("{parity}");
+                }
             }
             display_jumps(&rdt);
             println!();

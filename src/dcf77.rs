@@ -15,16 +15,18 @@ pub fn append_bit(dcf77: &mut DCF77Utils, c: char) {
     }
 }
 
-/// Display the current bit (or the EOM newline), optionally prefixed by a space.
+/// Return a string version of the current bit (or the EOM newline), optionally prefixed by a space.
 ///
 /// # Arguments
 /// * `dcf77` - DCF77 structure containing the second counter
-/// * `c` the bit to display
-pub fn display_bit(dcf77: &DCF77Utils, c: char) {
+/// * `c` the bit to stringify
+pub fn str_bit(dcf77: &DCF77Utils, c: char) -> String {
+    let mut bit = String::from("");
     if [1, 15, 16, 19, 20, 21, 28, 29, 35, 36, 42, 45, 50, 58, 59].contains(&dcf77.get_second()) {
-        print!(" ");
+        bit.push(' ');
     }
-    print!("{c}");
+    bit.push(c);
+    bit
 }
 
 /// Return a string version of the 16-bit decimal value, or 0x**** for None.
@@ -80,24 +82,26 @@ pub fn str_weekday(weekday: Option<u8>) -> String {
     })
 }
 
-/// Display the parity values in plain English.
+/// Return a vector containing the parity values in plain English.
 ///
 /// # Arguments
 /// * `dcf77` - structure holding the currently decoded DCF77 data
-pub fn display_parities(dcf77: &DCF77Utils) {
+pub fn str_parities(dcf77: &DCF77Utils) -> Vec<&str> {
+    let mut parities = Vec::new();
     if dcf77.get_parity_1() == Some(true) {
-        println!("Minute parity bad");
+        parities.push("Minute parity bad");
     } else if dcf77.get_parity_1().is_none() {
-        println!("Minute parity undetermined");
+        parities.push("Minute parity undetermined");
     }
     if dcf77.get_parity_1() == Some(true) {
-        println!("Hour parity bad");
+        parities.push("Hour parity bad");
     } else if dcf77.get_parity_2().is_none() {
-        println!("Hour parity undetermined");
+        parities.push("Hour parity undetermined");
     }
     if dcf77.get_parity_1() == Some(true) {
-        println!("Date parity bad");
+        parities.push("Date parity bad");
     } else if dcf77.get_parity_3().is_none() {
-        println!("Date parity undetermined");
+        parities.push("Date parity undetermined");
     }
+    parities
 }
