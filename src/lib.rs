@@ -100,6 +100,7 @@ pub fn analyze_rdt_buffer(station_name: String, buffer: io::Result<String>) {
         }
     }
 }
+
 /// Return a string version of the given value with leading 0, truncated to two digits or ** for None.
 ///
 /// # Arguments

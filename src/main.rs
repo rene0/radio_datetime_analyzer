@@ -1,5 +1,5 @@
-use std::{env, fs};
 use radio_datetime_analyzer::analyze_rdt_buffer;
+use std::{env, fs};
 
 fn main() {
     let mut cmd_args = env::args();
