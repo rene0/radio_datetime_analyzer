@@ -58,14 +58,17 @@ pub fn analyze_rdt_buffer(station_name: String, buffer: io::Result<String>) {
                     npl.get_minute_length()
                 );
             }
-            display_datetime(
-                &rdt,
-                if station_name == "dcf77" {
-                    dcf77::str_weekday(rdt.get_weekday())
-                } else {
-                    npl::str_weekday(rdt.get_weekday())
-                },
-                dst,
+            print!(
+                "{}",
+                str_datetime(
+                    &rdt,
+                    if station_name == "dcf77" {
+                        dcf77::str_weekday(rdt.get_weekday())
+                    } else {
+                        npl::str_weekday(rdt.get_weekday())
+                    },
+                    dst,
+                )
             );
             if station_name == "dcf77" {
                 println!(
@@ -89,7 +92,9 @@ pub fn analyze_rdt_buffer(station_name: String, buffer: io::Result<String>) {
                     println!("{parity}");
                 }
             }
-            display_jumps(&rdt);
+            for jump in str_jumps(&rdt) {
+                println!("{}", jump);
+            }
             println!();
         }
         if station_name == "dcf77" {
@@ -138,14 +143,14 @@ pub fn dst_info(dst: Option<u8>) -> String {
     s
 }
 
-/// Display the part of the date and time which is common to all stations.
+/// Return the part of the date and time which is common to all stations.
 ///
 /// # Arguments
 /// * `rdt` - structure containing the currently decoded date/time
 /// * `weekday` - name of the current weekday, in English
 /// * `dst` - current state of daylight saving time
-pub fn display_datetime(rdt: &RadioDateTimeUtils, weekday: String, dst: Option<u8>) {
-    print!(
+pub fn str_datetime(rdt: &RadioDateTimeUtils, weekday: String, dst: Option<u8>) -> String {
+    format!(
         "{}-{}-{} {} {}:{} [{}]",
         str_u8_02(rdt.get_year()),
         str_u8_02(rdt.get_month()),
@@ -154,30 +159,32 @@ pub fn display_datetime(rdt: &RadioDateTimeUtils, weekday: String, dst: Option<u
         str_u8_02(rdt.get_hour()),
         str_u8_02(rdt.get_minute()),
         dst_info(dst)
-    );
+    )
 }
 
-/// Display any unexpected jumps in plain English.
+/// Return a vector of any unexpected jumps in plain English.
 ///
 /// # Arguments
 /// * `rdt` - structure containing the currently decoded date/time
-pub fn display_jumps(rdt: &RadioDateTimeUtils) {
+pub fn str_jumps(rdt: &RadioDateTimeUtils) -> Vec<&str> {
+    let mut jumps = Vec::new();
     if rdt.get_jump_year() {
-        println!("Year jumped");
+        jumps.push("Year jumped");
     }
     if rdt.get_jump_month() {
-        println!("Month jumped");
+        jumps.push("Month jumped");
     }
     if rdt.get_jump_day() {
-        println!("Day-of-month jumped");
+        jumps.push("Day-of-month jumped");
     }
     if rdt.get_jump_weekday() {
-        println!("Day-of-week jumped");
+        jumps.push("Day-of-week jumped");
     }
     if rdt.get_jump_hour() {
-        println!("Hour jumped");
+        jumps.push("Hour jumped");
     }
     if rdt.get_jump_minute() {
-        println!("Minute jumped");
+        jumps.push("Minute jumped");
     }
+    jumps
 }
