@@ -9,7 +9,7 @@ pub mod npl;
 pub fn analyze_rdt_buffer(station_name: String, buffer: io::Result<String>) {
     let mut dcf77 = DCF77Utils::default();
     let mut npl = NPLUtils::default();
-    let mut npl_buffer = [' '; 62]; // ideally this 62 is npl::BIT_BUFFER_SIZE but that is private
+    let mut npl_buffer = [' '; npl_utils::BIT_BUFFER_SIZE];
     let buffer = buffer.unwrap();
     for c in buffer.chars() {
         if station_name == "dcf77" && !['0', '1', '_', '\n'].contains(&c) {
