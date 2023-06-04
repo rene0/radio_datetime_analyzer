@@ -98,6 +98,9 @@ pub fn analyze_rdt_buffer(station_name: String, buffer: io::Result<String>) {
                     for parity in frontend::dcf77::str_parities(&dcf77) {
                         println!("{parity}")
                     }
+                    for check in frontend::dcf77::str_check_bits(&dcf77) {
+                        println!("{check}")
+                    }
                 }
                 "npl" => {
                     println!(" DUT1={}", frontend::npl::str_i8(npl.get_dut1()));

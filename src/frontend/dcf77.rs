@@ -117,3 +117,22 @@ pub fn str_call_bit(dcf77: &DCF77Utils) -> String {
         None => "?",
     })
 }
+
+/// Return a vector containing if bit 0 or 20 are wrong or undetermined, in plain English.
+///
+/// # Arguments
+/// * `dcf77` - structure holding the currently decoded DCF77 data
+pub fn str_check_bits(dcf77: &DCF77Utils) -> Vec<&str> {
+    let mut checks = Vec::new();
+    if dcf77.get_bit_0() == Some(true) {
+        checks.push("Bit 0 is wrong");
+    } else if dcf77.get_bit_0().is_none() {
+        checks.push("Bit 0 is undetermined")
+    }
+    if dcf77.get_bit_20() == Some(false) {
+        checks.push("Bit 20 is wrong");
+    } else if dcf77.get_bit_20().is_none() {
+        checks.push("Bit 20 is undetermined")
+    }
+    checks
+}
