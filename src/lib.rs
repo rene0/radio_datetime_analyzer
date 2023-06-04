@@ -114,7 +114,7 @@ pub fn analyze_rdt_buffer(station_name: String, buffer: io::Result<String>) {
 ///
 /// # Arguments
 /// * `value` - value to stringify
-pub fn str_u8_02(value: Option<u8>) -> String {
+fn str_u8_02(value: Option<u8>) -> String {
     if let Some(s_value) = value {
         format!("{s_value:>02}")
     } else {
@@ -126,7 +126,7 @@ pub fn str_u8_02(value: Option<u8>) -> String {
 ///
 /// # Arguments
 /// * `dst` - current state of daylight saving time
-pub fn dst_info(dst: Option<u8>) -> String {
+fn dst_info(dst: Option<u8>) -> String {
     let mut s = String::from("");
     if let Some(s_dst) = dst {
         if s_dst & radio_datetime_utils::DST_ANNOUNCED != 0 {
@@ -153,7 +153,7 @@ pub fn dst_info(dst: Option<u8>) -> String {
 /// * `rdt` - structure containing the currently decoded date/time
 /// * `weekday` - name of the current weekday, in English
 /// * `dst` - current state of daylight saving time
-pub fn str_datetime(rdt: &RadioDateTimeUtils, weekday: String, dst: Option<u8>) -> String {
+fn str_datetime(rdt: &RadioDateTimeUtils, weekday: String, dst: Option<u8>) -> String {
     format!(
         "{}-{}-{} {} {}:{} [{}]",
         str_u8_02(rdt.get_year()),
@@ -170,7 +170,7 @@ pub fn str_datetime(rdt: &RadioDateTimeUtils, weekday: String, dst: Option<u8>) 
 ///
 /// # Arguments
 /// * `rdt` - structure containing the currently decoded date/time
-pub fn str_jumps(rdt: &RadioDateTimeUtils) -> Vec<&str> {
+fn str_jumps(rdt: &RadioDateTimeUtils) -> Vec<&str> {
     let mut jumps = Vec::new();
     if rdt.get_jump_year() {
         jumps.push("Year jumped");
