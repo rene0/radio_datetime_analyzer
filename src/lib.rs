@@ -11,18 +11,17 @@ pub fn analyze_rdt_buffer(station_name: String, buffer: io::Result<String>) {
     let mut npl_buffer = [' '; npl_utils::BIT_BUFFER_SIZE];
     let buffer = buffer.unwrap();
     for c in buffer.chars() {
-        if station_name == "dcf77" && !['0', '1', '_', '\n'].contains(&c) {
-            continue;
-        }
-        if station_name == "npl" && !['0', '1', '2', '3', '4', '_', '\n'].contains(&c) {
-            continue;
-        }
-
         if station_name == "dcf77" {
+            if !['0', '1', '_', '\n'].contains(&c) {
+                continue;
+            }
             frontend::dcf77::append_bit(&mut dcf77, c);
             print!("{}", frontend::dcf77::str_bit(&dcf77, c));
         }
         if station_name == "npl" {
+            if !['0', '1', '2', '3', '4', '_', '\n'].contains(&c) {
+                continue;
+            }
             frontend::npl::append_bits(&mut npl, c, &mut npl_buffer);
         }
         if c == '\n' {
