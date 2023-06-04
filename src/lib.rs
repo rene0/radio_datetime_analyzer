@@ -3,8 +3,7 @@ use npl_utils::NPLUtils;
 use radio_datetime_utils::RadioDateTimeUtils;
 use std::io;
 
-pub mod dcf77;
-pub mod npl;
+pub mod frontend;
 
 pub fn analyze_rdt_buffer(station_name: String, buffer: io::Result<String>) {
     let mut dcf77 = DCF77Utils::default();
@@ -20,11 +19,11 @@ pub fn analyze_rdt_buffer(station_name: String, buffer: io::Result<String>) {
         }
 
         if station_name == "dcf77" {
-            dcf77::append_bit(&mut dcf77, c);
-            print!("{}", dcf77::str_bit(&dcf77, c));
+            frontend::dcf77::append_bit(&mut dcf77, c);
+            print!("{}", frontend::dcf77::str_bit(&dcf77, c));
         }
         if station_name == "npl" {
-            npl::append_bits(&mut npl, c, &mut npl_buffer);
+            frontend::npl::append_bits(&mut npl, c, &mut npl_buffer);
         }
         if c == '\n' {
             let rdt: RadioDateTimeUtils;
@@ -46,7 +45,7 @@ pub fn analyze_rdt_buffer(station_name: String, buffer: io::Result<String>) {
                     dcf77.get_next_minute_length()
                 );
             } else {
-                print!("{}", npl::str_bits(&npl_buffer, npl.get_minute_length()));
+                print!("{}", frontend::npl::str_bits(&npl_buffer, npl.get_minute_length()));
                 npl.decode_time();
                 npl.force_new_minute();
                 rdt = npl.get_radio_datetime();
@@ -63,9 +62,9 @@ pub fn analyze_rdt_buffer(station_name: String, buffer: io::Result<String>) {
                 str_datetime(
                     &rdt,
                     if station_name == "dcf77" {
-                        dcf77::str_weekday(rdt.get_weekday())
+                        frontend::dcf77::str_weekday(rdt.get_weekday())
                     } else {
-                        npl::str_weekday(rdt.get_weekday())
+                        frontend::npl::str_weekday(rdt.get_weekday())
                     },
                     dst,
                 )
@@ -73,22 +72,22 @@ pub fn analyze_rdt_buffer(station_name: String, buffer: io::Result<String>) {
             if station_name == "dcf77" {
                 println!(
                     " [{}]",
-                    dcf77::leap_second_info(rdt.get_leap_second(), dcf77.get_leap_second_is_one())
+                    frontend::dcf77::leap_second_info(rdt.get_leap_second(), dcf77.get_leap_second_is_one())
                 );
                 println!(
                     "Third-party buffer={}",
-                    dcf77::str_hex(dcf77.get_third_party_buffer())
+                    frontend::dcf77::str_hex(dcf77.get_third_party_buffer())
                 );
-                for parity in dcf77::str_parities(&dcf77) {
+                for parity in frontend::dcf77::str_parities(&dcf77) {
                     println!("{parity}")
                 }
             }
             if station_name == "npl" {
-                println!(" DUT1={}", npl::str_i8(npl.get_dut1()));
+                println!(" DUT1={}", frontend::npl::str_i8(npl.get_dut1()));
                 if !npl.end_of_minute_marker_present(false) {
                     println!("End-of-minute marker absent");
                 }
-                for parity in npl::str_parities(&npl) {
+                for parity in frontend::npl::str_parities(&npl) {
                     println!("{parity}");
                 }
             }
