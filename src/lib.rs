@@ -44,7 +44,10 @@ pub fn analyze_rdt_buffer(station_name: String, buffer: io::Result<String>) {
                     dcf77.get_next_minute_length()
                 );
             } else {
-                print!("{}", frontend::npl::str_bits(&npl_buffer, npl.get_minute_length()));
+                print!(
+                    "{}",
+                    frontend::npl::str_bits(&npl_buffer, npl.get_minute_length())
+                );
                 npl.decode_time();
                 npl.force_new_minute();
                 rdt = npl.get_radio_datetime();
@@ -71,7 +74,10 @@ pub fn analyze_rdt_buffer(station_name: String, buffer: io::Result<String>) {
             if station_name == "dcf77" {
                 println!(
                     " [{}]",
-                    frontend::dcf77::leap_second_info(rdt.get_leap_second(), dcf77.get_leap_second_is_one())
+                    frontend::dcf77::leap_second_info(
+                        rdt.get_leap_second(),
+                        dcf77.get_leap_second_is_one()
+                    )
                 );
                 println!(
                     "Third-party buffer={}",
