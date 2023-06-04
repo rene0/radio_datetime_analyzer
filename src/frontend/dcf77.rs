@@ -105,3 +105,15 @@ pub fn str_parities(dcf77: &DCF77Utils) -> Vec<&str> {
     }
     parities
 }
+
+/// Return if the call bit is active, in plain English.
+///
+/// # Arguments
+/// * `dcf77` - structure holding the currently decoded DCF77 data
+pub fn str_call_bit(dcf77: &DCF77Utils) -> String {
+    String::from(match dcf77.get_call_bit() {
+        Some(false) => "",
+        Some(true) => "call",
+        None => "?",
+    })
+}

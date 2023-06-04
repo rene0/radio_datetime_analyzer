@@ -84,11 +84,12 @@ pub fn analyze_rdt_buffer(station_name: String, buffer: io::Result<String>) {
             match station_name.as_str() {
                 "dcf77" => {
                     println!(
-                        " [{}]",
+                        " [{}] [{}]",
                         frontend::dcf77::leap_second_info(
                             rdt.get_leap_second(),
                             dcf77.get_leap_second_is_one(),
                         ),
+                        frontend::dcf77::str_call_bit(&dcf77),
                     );
                     println!(
                         "Third-party buffer={}",
