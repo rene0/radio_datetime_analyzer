@@ -23,7 +23,8 @@ pub fn append_bits(npl: &mut NPLUtils, c: char, buffer: &mut [char]) {
     buffer[npl.get_second() as usize] = c;
 }
 
-/// Return a string version of the current bit pair (or the EOM newline), optionally prefixed by a space.
+/// Return a string version of the all the bit pairs (or the EOM newline) in this minute.
+/// Each bit pair is optionally prefixed by a space.
 ///
 /// # Arguments
 /// * `buffer` - the buffer to stringify
