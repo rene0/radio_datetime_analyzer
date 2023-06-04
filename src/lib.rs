@@ -11,101 +11,113 @@ pub fn analyze_rdt_buffer(station_name: String, buffer: io::Result<String>) {
     let mut npl_buffer = [' '; npl_utils::BIT_BUFFER_SIZE];
     let buffer = buffer.unwrap();
     for c in buffer.chars() {
-        if station_name == "dcf77" {
-            if !['0', '1', '_', '\n'].contains(&c) {
-                continue;
+        match station_name.as_str() {
+            "dcf77" => {
+                if !['0', '1', '_', '\n'].contains(&c) {
+                    continue;
+                }
+                frontend::dcf77::append_bit(&mut dcf77, c);
+                print!("{}", frontend::dcf77::str_bit(&dcf77, c));
             }
-            frontend::dcf77::append_bit(&mut dcf77, c);
-            print!("{}", frontend::dcf77::str_bit(&dcf77, c));
-        }
-        if station_name == "npl" {
-            if !['0', '1', '2', '3', '4', '_', '\n'].contains(&c) {
-                continue;
+            "npl" => {
+                if !['0', '1', '2', '3', '4', '_', '\n'].contains(&c) {
+                    continue;
+                }
+                frontend::npl::append_bits(&mut npl, c, &mut npl_buffer);
             }
-            frontend::npl::append_bits(&mut npl, c, &mut npl_buffer);
+            _ => {}
         }
         if c == '\n' {
             let rdt: RadioDateTimeUtils;
             let dst: Option<u8>;
-            if station_name == "dcf77" {
-                // force-feed the missing EOM bit
-                dcf77.set_current_bit(None);
-                dcf77.increase_second();
+            match station_name.as_str() {
+                "dcf77" => {
+                    // force-feed the missing EOM bit
+                    dcf77.set_current_bit(None);
+                    dcf77.increase_second();
 
-                dcf77.decode_time();
-                dcf77.force_new_minute();
-                rdt = dcf77.get_radio_datetime();
-                dst = rdt.get_dst();
-                println!(
-                    "first_minute={} second={} this_minute_length={} next_minute_length={}",
-                    dcf77.get_first_minute(),
-                    dcf77.get_second(),
-                    dcf77.get_this_minute_length(),
-                    dcf77.get_next_minute_length()
-                );
-            } else {
-                print!(
-                    "{}",
-                    frontend::npl::str_bits(&npl_buffer, npl.get_minute_length())
-                );
-                npl.decode_time();
-                npl.force_new_minute();
-                rdt = npl.get_radio_datetime();
-                dst = rdt.get_dst();
-                println!(
-                    "first_minute={} second={} minute_length={}",
-                    npl.get_first_minute(),
-                    npl.get_second(),
-                    npl.get_minute_length()
-                );
+                    dcf77.decode_time();
+                    dcf77.force_new_minute();
+                    rdt = dcf77.get_radio_datetime();
+                    dst = rdt.get_dst();
+                    println!(
+                        "first_minute={} second={} this_minute_length={} next_minute_length={}",
+                        dcf77.get_first_minute(),
+                        dcf77.get_second(),
+                        dcf77.get_this_minute_length(),
+                        dcf77.get_next_minute_length()
+                    );
+                }
+                "npl" => {
+                    print!(
+                        "{}",
+                        frontend::npl::str_bits(&npl_buffer, npl.get_minute_length())
+                    );
+                    npl.decode_time();
+                    npl.force_new_minute();
+                    rdt = npl.get_radio_datetime();
+                    dst = rdt.get_dst();
+                    println!(
+                        "first_minute={} second={} minute_length={}",
+                        npl.get_first_minute(),
+                        npl.get_second(),
+                        npl.get_minute_length()
+                    );
+                }
+                _ => {
+                    rdt = RadioDateTimeUtils::new(255); // bogus Sunday value
+                    dst = None;
+                }
             }
             print!(
                 "{}",
                 str_datetime(
                     &rdt,
-                    if station_name == "dcf77" {
-                        frontend::dcf77::str_weekday(rdt.get_weekday())
-                    } else {
-                        frontend::npl::str_weekday(rdt.get_weekday())
+                    match station_name.as_str() {
+                        "dcf77" => frontend::dcf77::str_weekday(rdt.get_weekday()),
+                        "npl" => frontend::npl::str_weekday(rdt.get_weekday()),
+                        _ => String::from(""),
                     },
-                    dst,
+                    dst
                 )
             );
-            if station_name == "dcf77" {
-                println!(
-                    " [{}]",
-                    frontend::dcf77::leap_second_info(
-                        rdt.get_leap_second(),
-                        dcf77.get_leap_second_is_one()
-                    )
-                );
-                println!(
-                    "Third-party buffer={}",
-                    frontend::dcf77::str_hex(dcf77.get_third_party_buffer())
-                );
-                for parity in frontend::dcf77::str_parities(&dcf77) {
-                    println!("{parity}")
+            match station_name.as_str() {
+                "dcf77" => {
+                    println!(
+                        " [{}]",
+                        frontend::dcf77::leap_second_info(
+                            rdt.get_leap_second(),
+                            dcf77.get_leap_second_is_one(),
+                        ),
+                    );
+                    println!(
+                        "Third-party buffer={}",
+                        frontend::dcf77::str_hex(dcf77.get_third_party_buffer())
+                    );
+                    for parity in frontend::dcf77::str_parities(&dcf77) {
+                        println!("{parity}")
+                    }
                 }
-            }
-            if station_name == "npl" {
-                println!(" DUT1={}", frontend::npl::str_i8(npl.get_dut1()));
-                if !npl.end_of_minute_marker_present(false) {
-                    println!("End-of-minute marker absent");
+                "npl" => {
+                    println!(" DUT1={}", frontend::npl::str_i8(npl.get_dut1()));
+                    if !npl.end_of_minute_marker_present(false) {
+                        println!("End-of-minute marker absent");
+                    }
+                    for parity in frontend::npl::str_parities(&npl) {
+                        println!("{parity}");
+                    }
                 }
-                for parity in frontend::npl::str_parities(&npl) {
-                    println!("{parity}");
-                }
+                _ => {}
             }
             for jump in str_jumps(&rdt) {
                 println!("{}", jump);
             }
             println!();
         }
-        if station_name == "dcf77" {
-            dcf77.increase_second();
-        }
-        if station_name == "npl" {
-            npl.increase_second();
+        match station_name.as_str() {
+            "dcf77" => dcf77.increase_second(),
+            "npl" => npl.increase_second(),
+            _ => {}
         }
     }
 }
