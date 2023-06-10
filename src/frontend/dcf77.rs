@@ -49,16 +49,25 @@ pub fn str_hex(value: Option<u16>) -> String {
 pub fn leap_second_info(leap_second: Option<u8>, is_one: Option<bool>) -> String {
     let mut s = String::from("");
     if let Some(s_leap) = leap_second {
+        let mut need_comma = false;
         if s_leap & radio_datetime_utils::LEAP_ANNOUNCED != 0 {
             s += "announced";
+            need_comma = true;
         }
         if s_leap & radio_datetime_utils::LEAP_PROCESSED != 0 {
+            if need_comma {
+                s += ",";
+            }
             s += "processed";
             if is_one.unwrap() {
                 s += ",one";
             }
+            need_comma = true;
         }
         if s_leap & radio_datetime_utils::LEAP_MISSING != 0 {
+            if need_comma {
+                s += ",";
+            }
             s += "missing";
         }
     }
