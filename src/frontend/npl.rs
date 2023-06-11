@@ -1,23 +1,28 @@
 use npl_utils::NPLUtils;
 use std::cmp::Ordering;
 
-/// Append the given bit pair to the current NPL structure and to the given buffer for later displaying
+/// Append the given bit pair to the current NPL structure and to the given buffer for later
+/// displaying.
 ///
 /// # Arguments
 /// * `npl` - the structure to append the bit pair to
-/// * `c` - the bit pair to add
+/// * `c` - the bit pair to add. The newline is there to force a new minute, it is a not a bit pair
+///         in itself.
 /// * `buffer` - buffer storing the bits for later displaying
 pub fn append_bits(npl: &mut NPLUtils, c: char, buffer: &mut [char]) {
     if c != '\n' {
+        // 4 is the 500ms long BOM marker
         npl.set_current_bit_a(match c {
             '0' | '2' => Some(false),
             '1' | '3' => Some(true),
-            _ => None, // '_' or '4' (the 500ms long BOM marker)
+            '4' | '_' => None,
+            _ => panic!("npl::append_bits(): impossible character '{c}'"),
         });
         npl.set_current_bit_b(match c {
             '0' | '1' => Some(false),
             '2' | '3' => Some(true),
-            _ => None, // '_' or '4' (the 500ms long BOM marker)
+            '4' | '_' => None,
+            _ => panic!("npl::append_bits(): impossible character '{c}'"),
         });
     }
     buffer[npl.get_second() as usize] = c;
@@ -116,4 +121,52 @@ pub fn str_parities(npl: &NPLUtils) -> Vec<&str> {
         parities.push("Hour/minute parity undetermined");
     }
     parities
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    #[should_panic]
+    fn test_append_bits_panic() {
+        let mut buffer = [' '; npl_utils::BIT_BUFFER_SIZE];
+        let mut npl = NPLUtils::default();
+        append_bits(&mut npl, '!', &mut buffer);
+    }
+
+    #[test]
+    fn test_append_bits_bunch() {
+        let mut buffer = [' '; npl_utils::BIT_BUFFER_SIZE];
+        let mut npl = NPLUtils::default();
+        append_bits(&mut npl, '0', &mut buffer);
+        assert_eq!(npl.get_current_bit_a(), Some(false));
+        assert_eq!(npl.get_current_bit_b(), Some(false));
+        npl.increase_second();
+        append_bits(&mut npl, '1', &mut buffer);
+        assert_eq!(npl.get_current_bit_a(), Some(true));
+        assert_eq!(npl.get_current_bit_b(), Some(false));
+        npl.increase_second();
+        append_bits(&mut npl, '_', &mut buffer); // broken
+        assert_eq!(npl.get_current_bit_a(), None);
+        assert_eq!(npl.get_current_bit_b(), None);
+        npl.increase_second();
+        append_bits(&mut npl, '2', &mut buffer);
+        assert_eq!(npl.get_current_bit_a(), Some(false));
+        assert_eq!(npl.get_current_bit_b(), Some(true));
+        npl.increase_second();
+        append_bits(&mut npl, '\n', &mut buffer);
+        // not added to npl.bit_*, this normally forces a new minute
+        assert_eq!(npl.get_current_bit_a(), None);
+        assert_eq!(npl.get_current_bit_b(), None);
+        npl.increase_second();
+        append_bits(&mut npl, '3', &mut buffer);
+        assert_eq!(npl.get_current_bit_a(), Some(true));
+        assert_eq!(npl.get_current_bit_b(), Some(true));
+        npl.increase_second();
+        append_bits(&mut npl, '4', &mut buffer); // BOM
+        assert_eq!(npl.get_current_bit_a(), None);
+        assert_eq!(npl.get_current_bit_a(), None);
+        assert_eq!(buffer[0..7], ['0', '1', '_', '2', '\n', '3', '4']);
+    }
 }
