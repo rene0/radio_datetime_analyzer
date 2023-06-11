@@ -4,13 +4,14 @@ use dcf77_utils::DCF77Utils;
 ///
 /// # Arguments
 /// `dcf77` - the structure to append the bit to
-/// `c` - the bit to add
+/// `c` - the bit to add. The newline is there to force a new minute, it is a not a bit in itself.
 pub fn append_bit(dcf77: &mut DCF77Utils, c: char) {
     if c != '\n' {
         dcf77.set_current_bit(match c {
             '0' => Some(false),
             '1' => Some(true),
-            _ => None, // always '_' in this case, but match must be exhaustive
+            '_' => None,
+            _ => panic!("dcf77::append_bit(): impossible character '{c}'"),
         });
     }
 }
