@@ -78,7 +78,11 @@ pub fn str_weekday(weekday: Option<u8>) -> String {
         Some(4) => "Thursday",
         Some(5) => "Friday",
         Some(6) => "Saturday",
-        _ => "?",
+        None => "?",
+        _ => {
+            let w = weekday.unwrap();
+            panic!("npl::str_weekday(): impossible weekday 'Some({w})'");
+        }
     })
 }
 
