@@ -1,5 +1,5 @@
 use dcf77_utils::DCF77Utils;
-use npl_utils::NPLUtils;
+use msf60_utils::MSFUtils;
 use radio_datetime_utils::RadioDateTimeUtils;
 use std::io;
 
@@ -7,8 +7,8 @@ pub mod frontend;
 
 pub fn analyze_rdt_buffer(station_name: String, buffer: io::Result<String>) {
     let mut dcf77 = DCF77Utils::default();
-    let mut npl = NPLUtils::default();
-    let mut npl_buffer = [' '; npl_utils::BIT_BUFFER_SIZE];
+    let mut msf = MSFUtils::default();
+    let mut msf_buffer = [' '; msf60_utils::BIT_BUFFER_SIZE];
     let buffer = buffer.unwrap();
     for c in buffer.chars() {
         match station_name.as_str() {
@@ -19,11 +19,11 @@ pub fn analyze_rdt_buffer(station_name: String, buffer: io::Result<String>) {
                 frontend::dcf77::append_bit(&mut dcf77, c);
                 print!("{}", frontend::dcf77::str_bit(&dcf77, c));
             }
-            "npl" => {
+            "msf" => {
                 if !['0', '1', '2', '3', '4', '_', '\n'].contains(&c) {
                     continue;
                 }
-                frontend::npl::append_bits(&mut npl, c, &mut npl_buffer);
+                frontend::msf::append_bits(&mut msf, c, &mut msf_buffer);
             }
             _ => {}
         }
@@ -48,20 +48,20 @@ pub fn analyze_rdt_buffer(station_name: String, buffer: io::Result<String>) {
                         dcf77.get_next_minute_length()
                     );
                 }
-                "npl" => {
+                "msf" => {
                     print!(
                         "{}",
-                        frontend::npl::str_bits(&npl_buffer, npl.get_minute_length())
+                        frontend::msf::str_bits(&msf_buffer, msf.get_minute_length())
                     );
-                    npl.decode_time();
-                    npl.force_new_minute();
-                    rdt = npl.get_radio_datetime();
+                    msf.decode_time();
+                    msf.force_new_minute();
+                    rdt = msf.get_radio_datetime();
                     dst = rdt.get_dst();
                     println!(
                         "first_minute={} second={} minute_length={}",
-                        npl.get_first_minute(),
-                        npl.get_second(),
-                        npl.get_minute_length()
+                        msf.get_first_minute(),
+                        msf.get_second(),
+                        msf.get_minute_length()
                     );
                 }
                 _ => {
@@ -75,7 +75,7 @@ pub fn analyze_rdt_buffer(station_name: String, buffer: io::Result<String>) {
                     &rdt,
                     match station_name.as_str() {
                         "dcf77" => frontend::dcf77::str_weekday(rdt.get_weekday()),
-                        "npl" => frontend::npl::str_weekday(rdt.get_weekday()),
+                        "msf" => frontend::msf::str_weekday(rdt.get_weekday()),
                         _ => String::from(""),
                     },
                     dst
@@ -102,12 +102,12 @@ pub fn analyze_rdt_buffer(station_name: String, buffer: io::Result<String>) {
                         println!("{check}")
                     }
                 }
-                "npl" => {
-                    println!(" DUT1={}", frontend::npl::str_i8(npl.get_dut1()));
-                    if !npl.end_of_minute_marker_present(false) {
+                "msf" => {
+                    println!(" DUT1={}", frontend::msf::str_i8(msf.get_dut1()));
+                    if !msf.end_of_minute_marker_present(false) {
                         println!("End-of-minute marker absent");
                     }
-                    for parity in frontend::npl::str_parities(&npl) {
+                    for parity in frontend::msf::str_parities(&msf) {
                         println!("{parity}");
                     }
                 }
@@ -120,7 +120,7 @@ pub fn analyze_rdt_buffer(station_name: String, buffer: io::Result<String>) {
         }
         match station_name.as_str() {
             "dcf77" => dcf77.increase_second(),
-            "npl" => npl.increase_second(),
+            "msf" => msf.increase_second(),
             _ => {}
         }
     }

@@ -9,8 +9,8 @@ fn main() {
         return;
     }
     let station_name = cmd_args.next().unwrap().to_lowercase();
-    if station_name != "dcf77" && station_name != "npl" {
-        eprintln!("logtype must be 'dcf77' or 'npl' but is '{station_name}'");
+    if station_name != "dcf77" && station_name != "msf" {
+        eprintln!("logtype must be 'dcf77' or 'msf' but is '{station_name}'");
         return;
     }
     let filename = cmd_args.next().unwrap();
