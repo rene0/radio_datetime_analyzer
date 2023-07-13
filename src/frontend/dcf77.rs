@@ -51,6 +51,8 @@ pub fn leap_second_info(leap_second: Option<u8>, is_one: Option<bool>) -> String
     let mut s = String::from("");
     if let Some(s_leap) = leap_second {
         let mut need_comma = false;
+        // LEAP_ANNOUNCED is mutually exclusive with [LEAP_PROCESSED, is_one, LEAP_MISSING]
+        // see radio_datetime_utils::set_leap_second()
         if s_leap & radio_datetime_utils::LEAP_ANNOUNCED != 0 {
             s += "announced";
             need_comma = true;
@@ -149,4 +151,66 @@ pub fn str_check_bits(dcf77: &DCF77Utils) -> Vec<&str> {
         checks.push("Bit 20 is undetermined")
     }
     checks
+}
+
+#[cfg(test)]
+mod tests {
+    use radio_datetime_utils::{LEAP_ANNOUNCED, LEAP_MISSING, LEAP_PROCESSED};
+    use super::*;
+
+    const LE_EMPTY: &str = "";
+    const LE_ANN: &str = "announced";
+    const LE_PROC: &str = "processed";
+    const LE_PROC1: &str = "processed,one";
+    const LE_PROC_MISSING: &str = "processed,missing";
+    const LE_PROC1_MISSING: &str = "processed,one,missing";
+
+    #[test]
+    fn test_leap_second_info_none_none() {
+        assert_eq!(leap_second_info(None, None), LE_EMPTY);
+    }
+    #[test]
+    fn test_leap_second_info_none_false() {
+        assert_eq!(leap_second_info(None, Some(false)), LE_EMPTY);
+    }
+    #[test]
+    fn test_leap_second_info_none_true() {
+        assert_eq!(leap_second_info(None, Some(true)), LE_EMPTY);
+    }
+    #[test]
+    fn test_leap_second_info_ann_none() {
+        assert_eq!(leap_second_info(Some(LEAP_ANNOUNCED), None), LE_ANN);
+    }
+    #[test]
+    fn test_leap_second_info_ann_false() {
+        assert_eq!(leap_second_info(Some(LEAP_ANNOUNCED), Some(false)), LE_ANN);
+    }
+    #[test]
+    fn test_leap_second_info_ann_true() {
+        assert_eq!(leap_second_info(Some(LEAP_ANNOUNCED), Some(true)), LE_ANN);
+    }
+    #[test]
+    fn test_leap_second_info_proc_none() {
+        assert_eq!(leap_second_info(Some(LEAP_PROCESSED), None), LE_PROC);
+    }
+    #[test]
+    fn test_leap_second_info_proc_false() {
+        assert_eq!(leap_second_info(Some(LEAP_PROCESSED), Some(false)), LE_PROC);
+    }
+    #[test]
+    fn test_leap_second_info_proc_true() {
+        assert_eq!(leap_second_info(Some(LEAP_PROCESSED), Some(true)), LE_PROC1);
+    }
+    #[test]
+    fn test_leap_second_info_proc_missing_none() {
+        assert_eq!(leap_second_info(Some(LEAP_PROCESSED | LEAP_MISSING), None), LE_PROC_MISSING);
+    }
+    #[test]
+    fn test_leap_second_info_proc_missing_false() {
+        assert_eq!(leap_second_info(Some(LEAP_PROCESSED | LEAP_MISSING), Some(false)), LE_PROC_MISSING);
+    }
+    #[test]
+    fn test_leap_second_info_proc_missing_true() {
+        assert_eq!(leap_second_info(Some(LEAP_PROCESSED | LEAP_MISSING), Some(true)), LE_PROC1_MISSING);
+    }
 }
