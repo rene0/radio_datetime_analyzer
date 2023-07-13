@@ -62,7 +62,7 @@ pub fn leap_second_info(leap_second: Option<u8>, is_one: Option<bool>) -> String
                 s += ",";
             }
             s += "processed";
-            if is_one.unwrap() {
+            if is_one == Some(true) {
                 s += ",one";
             }
             need_comma = true;
