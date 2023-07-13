@@ -155,8 +155,8 @@ pub fn str_check_bits(dcf77: &DCF77Utils) -> Vec<&str> {
 
 #[cfg(test)]
 mod tests {
-    use radio_datetime_utils::{LEAP_ANNOUNCED, LEAP_MISSING, LEAP_PROCESSED};
     use super::*;
+    use radio_datetime_utils::{LEAP_ANNOUNCED, LEAP_MISSING, LEAP_PROCESSED};
 
     const LE_EMPTY: &str = "";
     const LE_ANN: &str = "announced";
@@ -203,14 +203,23 @@ mod tests {
     }
     #[test]
     fn test_leap_second_info_proc_missing_none() {
-        assert_eq!(leap_second_info(Some(LEAP_PROCESSED | LEAP_MISSING), None), LE_PROC_MISSING);
+        assert_eq!(
+            leap_second_info(Some(LEAP_PROCESSED | LEAP_MISSING), None),
+            LE_PROC_MISSING
+        );
     }
     #[test]
     fn test_leap_second_info_proc_missing_false() {
-        assert_eq!(leap_second_info(Some(LEAP_PROCESSED | LEAP_MISSING), Some(false)), LE_PROC_MISSING);
+        assert_eq!(
+            leap_second_info(Some(LEAP_PROCESSED | LEAP_MISSING), Some(false)),
+            LE_PROC_MISSING
+        );
     }
     #[test]
     fn test_leap_second_info_proc_missing_true() {
-        assert_eq!(leap_second_info(Some(LEAP_PROCESSED | LEAP_MISSING), Some(true)), LE_PROC1_MISSING);
+        assert_eq!(
+            leap_second_info(Some(LEAP_PROCESSED | LEAP_MISSING), Some(true)),
+            LE_PROC1_MISSING
+        );
     }
 }
