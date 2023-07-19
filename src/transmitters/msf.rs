@@ -59,6 +59,8 @@ pub fn str_bits(buffer: &[char], minute_length: u8) -> String {
         }
         bits.push(*c);
         if idx == minute_length as usize {
+            // cut off any remaining characters,
+            // i.e. the \n and any empty space to accommodate for positive leap seconds
             break;
         }
     }
