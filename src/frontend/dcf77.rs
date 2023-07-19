@@ -222,4 +222,29 @@ mod tests {
             LE_PROC1_MISSING
         );
     }
+
+    #[test]
+    #[should_panic]
+    fn test_append_bit_panic() {
+        let mut dcf77 = DCF77Utils::default();
+        append_bit(&mut dcf77, '!');
+    }
+
+    #[test]
+    fn test_append_bits_bunch() {
+        let mut dcf77 = DCF77Utils::default();
+        append_bit(&mut dcf77, '0');
+        assert_eq!(dcf77.get_current_bit(), Some(false));
+        dcf77.increase_second();
+        append_bit(&mut dcf77, '\n');
+        // this normally forces a new minute
+        assert_eq!(dcf77.get_current_bit(), None);
+        dcf77.increase_second();
+        append_bit(&mut dcf77, '1');
+        assert_eq!(dcf77.get_current_bit(), Some(true));
+        dcf77.increase_second();
+        append_bit(&mut dcf77, '_'); // broken/empty bit
+        assert_eq!(dcf77.get_current_bit(), None);
+        dcf77.increase_second();
+    }
 }
