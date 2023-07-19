@@ -3,7 +3,7 @@ use msf60_utils::MSFUtils;
 use radio_datetime_utils::RadioDateTimeUtils;
 use std::io;
 
-pub mod frontend;
+pub mod transmitters;
 
 pub fn analyze_rdt_buffer(station_name: String, buffer: io::Result<String>) {
     let mut dcf77 = DCF77Utils::default();
@@ -16,14 +16,14 @@ pub fn analyze_rdt_buffer(station_name: String, buffer: io::Result<String>) {
                 if !['0', '1', '_', '\n'].contains(&c) {
                     continue;
                 }
-                frontend::dcf77::append_bit(&mut dcf77, c);
-                print!("{}", frontend::dcf77::str_bit(&dcf77, c));
+                transmitters::dcf77::append_bit(&mut dcf77, c);
+                print!("{}", transmitters::dcf77::str_bit(&dcf77, c));
             }
             "msf" => {
                 if !['0', '1', '2', '3', '4', '_', '\n'].contains(&c) {
                     continue;
                 }
-                frontend::msf::append_bits(&mut msf, c, &mut msf_buffer);
+                transmitters::msf::append_bits(&mut msf, c, &mut msf_buffer);
             }
             _ => {}
         }
@@ -51,7 +51,7 @@ pub fn analyze_rdt_buffer(station_name: String, buffer: io::Result<String>) {
                 "msf" => {
                     print!(
                         "{}",
-                        frontend::msf::str_bits(&msf_buffer, msf.get_minute_length())
+                        transmitters::msf::str_bits(&msf_buffer, msf.get_minute_length())
                     );
                     msf.decode_time();
                     msf.force_new_minute();
@@ -74,8 +74,8 @@ pub fn analyze_rdt_buffer(station_name: String, buffer: io::Result<String>) {
                 str_datetime(
                     &rdt,
                     match station_name.as_str() {
-                        "dcf77" => frontend::dcf77::str_weekday(rdt.get_weekday()),
-                        "msf" => frontend::msf::str_weekday(rdt.get_weekday()),
+                        "dcf77" => transmitters::dcf77::str_weekday(rdt.get_weekday()),
+                        "msf" => transmitters::msf::str_weekday(rdt.get_weekday()),
                         _ => String::from(""),
                     },
                     dst
@@ -85,29 +85,29 @@ pub fn analyze_rdt_buffer(station_name: String, buffer: io::Result<String>) {
                 "dcf77" => {
                     println!(
                         " [{}] [{}]",
-                        frontend::dcf77::leap_second_info(
+                        transmitters::dcf77::leap_second_info(
                             rdt.get_leap_second(),
                             dcf77.get_leap_second_is_one(),
                         ),
-                        frontend::dcf77::str_call_bit(&dcf77),
+                        transmitters::dcf77::str_call_bit(&dcf77),
                     );
                     println!(
                         "Third-party buffer={}",
-                        frontend::dcf77::str_hex(dcf77.get_third_party_buffer())
+                        transmitters::dcf77::str_hex(dcf77.get_third_party_buffer())
                     );
-                    for parity in frontend::dcf77::str_parities(&dcf77) {
+                    for parity in transmitters::dcf77::str_parities(&dcf77) {
                         println!("{parity}")
                     }
-                    for check in frontend::dcf77::str_check_bits(&dcf77) {
+                    for check in transmitters::dcf77::str_check_bits(&dcf77) {
                         println!("{check}")
                     }
                 }
                 "msf" => {
-                    println!(" DUT1={}", frontend::msf::str_i8(msf.get_dut1()));
+                    println!(" DUT1={}", transmitters::msf::str_i8(msf.get_dut1()));
                     if !msf.end_of_minute_marker_present(false) {
                         println!("End-of-minute marker absent");
                     }
-                    for parity in frontend::msf::str_parities(&msf) {
+                    for parity in transmitters::msf::str_parities(&msf) {
                         println!("{parity}");
                     }
                 }
