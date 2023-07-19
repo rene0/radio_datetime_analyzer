@@ -151,7 +151,7 @@ mod tests {
         assert_eq!(msf.get_current_bit_a(), Some(true));
         assert_eq!(msf.get_current_bit_b(), Some(false));
         msf.increase_second();
-        append_bits(&mut msf, '_', &mut buffer); // broken
+        append_bits(&mut msf, '_', &mut buffer); // broken bit
         assert_eq!(msf.get_current_bit_a(), None);
         assert_eq!(msf.get_current_bit_b(), None);
         msf.increase_second();
