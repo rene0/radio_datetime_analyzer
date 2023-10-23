@@ -42,6 +42,11 @@ pub fn str_bits(buffer: &[char], minute_length: u8) -> String {
         Ordering::Greater => -1,
     };
     for (idx, c) in buffer.iter().enumerate() {
+        if idx == minute_length as usize {
+            // cut off any remaining characters,
+            // i.e. the \n and any empty space to accommodate for positive leap seconds
+            break;
+        }
         if [
             1,
             9,
@@ -58,11 +63,6 @@ pub fn str_bits(buffer: &[char], minute_length: u8) -> String {
             bits.push(' ');
         }
         bits.push(*c);
-        if idx == minute_length as usize {
-            // cut off any remaining characters,
-            // i.e. the \n and any empty space to accommodate for positive leap seconds
-            break;
-        }
     }
     bits
 }
@@ -173,5 +173,65 @@ mod tests {
         assert_eq!(msf.get_current_bit_a(), None);
         assert_eq!(msf.get_current_bit_a(), None);
         assert_eq!(buffer[0..7], ['0', '1', '_', '2', '\n', '3', '4']);
+    }
+
+    #[test]
+    fn test_str_bits_59() {
+        const BUFFER: [char; 59] = [
+            '4', // 0
+            '0', '0', '0', '0', '0', '0', '0', '0', // 1-8
+            '0', '0', '0', '0', '0', '0', '0', // 9-15
+            '0', '0', '1', '0', '0', '0', '1', '1', // 16-23
+            '1', '0', '0', '0', '0', // 24-28
+            '1', '0', '0', '0', '1', '1', // 29-34
+            '0', '0', '1', // 35-37
+            '1', '0', '0', '0', '1', '1', // 38-43
+            '0', '0', '1', '0', '1', '1', '0', // 44-50
+            '0', '1', '1', '3', '1', '3', '3', '0', // 51-58
+        ];
+        const WANTED: &str = "4 00000000 0000000 00100011 10000 100011 001 100011 0010110 01131330";
+        assert_eq!(str_bits(&BUFFER, 59), WANTED);
+        assert_eq!(str_bits(&[BUFFER, BUFFER].concat(), 59), WANTED);
+    }
+
+    #[test]
+    fn test_str_bits_60() {
+        const BUFFER: [char; 60] = [
+            '4', // 0
+            '0', '0', '0', '0', '0', '0', '0', '0', // 1-8
+            '0', '0', '0', '0', '0', '0', '0', '0', // 9-16
+            '0', '0', '1', '0', '0', '0', '1', '1', // 17-24
+            '1', '0', '0', '0', '0', // 25-29
+            '1', '0', '0', '0', '1', '1', // 30-35
+            '0', '0', '1', // 36-38
+            '1', '0', '0', '0', '1', '1', // 39-44
+            '0', '0', '1', '0', '1', '1', '0', // 45-51
+            '0', '1', '1', '3', '1', '3', '3', '0', // 52-59
+        ];
+        const WANTED: &str =
+            "4 00000000 00000000 00100011 10000 100011 001 100011 0010110 01131330";
+        assert_eq!(str_bits(&BUFFER, 60), WANTED);
+        assert_eq!(str_bits(&[BUFFER, BUFFER].concat(), 60), WANTED);
+    }
+
+    #[test]
+    fn test_str_bits_61() {
+        const BUFFER: [char; 61] = [
+            '4', // 0
+            '0', '0', '0', '0', '0', '0', '0', '0', // 1-8
+            '0', '0', '0', '0', '0', '0', '0', '0', // 9-16
+            '0', // 17
+            '0', '0', '1', '0', '0', '0', '1', '1', // 18-25
+            '1', '0', '0', '0', '0', // 26-30
+            '1', '0', '0', '0', '1', '1', // 31-38
+            '0', '0', '1', // 37-39
+            '1', '0', '0', '0', '1', '1', // 40-45
+            '0', '0', '1', '0', '1', '1', '0', // 46-52
+            '0', '1', '1', '3', '1', '3', '3', '0', // 53-60
+        ];
+        const WANTED: &str =
+            "4 00000000 000000000 00100011 10000 100011 001 100011 0010110 01131330";
+        assert_eq!(str_bits(&BUFFER, 61), WANTED);
+        assert_eq!(str_bits(&[BUFFER, BUFFER].concat(), 61), WANTED);
     }
 }
