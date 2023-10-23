@@ -82,7 +82,10 @@ pub fn str_weekday(weekday: Option<u8>) -> String {
         Some(6) => "Saturday",
         None => "?",
         _ => {
-            panic!("msf::str_weekday(): impossible weekday 'Some({})'", weekday.unwrap());
+            panic!(
+                "msf::str_weekday(): impossible weekday 'Some({})'",
+                weekday.unwrap()
+            );
         }
     })
 }

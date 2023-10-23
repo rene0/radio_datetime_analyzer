@@ -92,7 +92,10 @@ pub fn str_weekday(weekday: Option<u8>) -> String {
         Some(7) => "Sunday",
         None => "?",
         _ => {
-            panic!("dcf77::str_weekday(): impossible weekday 'Some({})'", weekday.unwrap());
+            panic!(
+                "dcf77::str_weekday(): impossible weekday 'Some({})'",
+                weekday.unwrap()
+            );
         }
     })
 }
