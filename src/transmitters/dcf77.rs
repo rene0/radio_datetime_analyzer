@@ -111,12 +111,12 @@ pub fn str_parities(dcf77: &DCF77Utils) -> Vec<&str> {
     } else if dcf77.get_parity_1().is_none() {
         parities.push("Minute parity undetermined");
     }
-    if dcf77.get_parity_1() == Some(true) {
+    if dcf77.get_parity_2() == Some(true) {
         parities.push("Hour parity bad");
     } else if dcf77.get_parity_2().is_none() {
         parities.push("Hour parity undetermined");
     }
-    if dcf77.get_parity_1() == Some(true) {
+    if dcf77.get_parity_3() == Some(true) {
         parities.push("Date parity bad");
     } else if dcf77.get_parity_3().is_none() {
         parities.push("Date parity undetermined");
