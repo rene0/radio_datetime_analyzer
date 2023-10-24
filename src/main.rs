@@ -1,5 +1,5 @@
-use radio_datetime_analyzer::analyze_rdt_buffer;
 use std::{env, fs};
+use radio_datetime_analyzer::transmitters;
 
 fn main() {
     let mut cmd_args = env::args();
@@ -19,5 +19,9 @@ fn main() {
         eprintln!("Could not read file '{}' : {s_error}", &filename);
         return;
     }
-    analyze_rdt_buffer(station_name, buffer);
+    match station_name.as_str() {
+        "dcf77" => transmitters::dcf77::analyze_buffer(buffer.unwrap()),
+        "msf" => transmitters::msf::analyze_buffer(buffer.unwrap()),
+        _ => {}
+    }
 }

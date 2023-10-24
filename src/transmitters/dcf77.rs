@@ -1,4 +1,64 @@
 use dcf77_utils::DCF77Utils;
+use radio_datetime_utils::RadioDateTimeUtils;
+use crate::{str_datetime, str_jumps};
+
+/// Analyze a DCF77 logfile.
+///
+/// # Arguments
+/// `buffer` - the buffer containing the DCF77 logfile
+pub fn analyze_buffer(buffer: String) /*-> Vec<&str>*/ {
+    let mut dcf77 = DCF77Utils::default();
+    for c in buffer.chars() {
+        if !['0', '1', '_', '\n'].contains(&c) {
+            continue;
+        }
+        append_bit(&mut dcf77, c);
+        print!("{}", str_bit(&dcf77, c));
+        if c == '\n' {
+            let rdt: RadioDateTimeUtils;
+            let dst: Option<u8>;
+            // force-feed the missing EOM bit
+            dcf77.set_current_bit(None);
+            dcf77.increase_second();
+
+            dcf77.decode_time();
+            dcf77.force_new_minute();
+            rdt = dcf77.get_radio_datetime();
+            dst = rdt.get_dst();
+            println!(
+                "first_minute={} second={} this_minute_length={} next_minute_length={}",
+                dcf77.get_first_minute(),
+                dcf77.get_second(),
+                dcf77.get_this_minute_length(),
+                dcf77.get_next_minute_length()
+            );
+            print!("{}", str_datetime(&rdt, str_weekday(rdt.get_weekday()), dst));
+            println!(
+                " [{}] [{}]",
+                leap_second_info(
+                    rdt.get_leap_second(),
+                    dcf77.get_leap_second_is_one(),
+                ),
+                str_call_bit(&dcf77),
+            );
+            println!(
+                "Third-party buffer={}",
+                str_hex(dcf77.get_third_party_buffer())
+            );
+            for parity in str_parities(&dcf77) {
+                println!("{parity}")
+            }
+            for check in str_check_bits(&dcf77) {
+                println!("{check}")
+            }
+            for jump in str_jumps(&rdt) {
+                println!("{}", jump);
+            }
+            println!();
+        }
+        dcf77.increase_second();
+    }
+}
 
 /// Append the given bit to the current DCF77 structure
 ///

@@ -1,5 +1,50 @@
 use msf60_utils::MSFUtils;
+use radio_datetime_utils::RadioDateTimeUtils;
 use std::cmp::Ordering;
+use crate::{str_datetime, str_jumps};
+
+/// Analyze a MSF logfile.
+///
+/// # Arguments
+/// `buffer` - the buffer containing the MSF logfile
+pub fn analyze_buffer(buffer: String) /*-> Vec<&str>*/ {
+    let mut msf = MSFUtils::default();
+    let mut msf_buffer = [' '; msf60_utils::BIT_BUFFER_SIZE];
+    for c in buffer.chars() {
+        if !['0', '1', '2', '3', '4', '_', '\n'].contains(&c) {
+            continue;
+        }
+        append_bits(&mut msf, c, &mut msf_buffer);
+        if c == '\n' {
+            let rdt: RadioDateTimeUtils;
+            let dst: Option<u8>;
+            print!("{}", str_bits(&msf_buffer, msf.get_minute_length()));
+            msf.decode_time();
+            msf.force_new_minute();
+            rdt = msf.get_radio_datetime();
+            dst = rdt.get_dst();
+            println!(
+                "first_minute={} second={} minute_length={}",
+                msf.get_first_minute(),
+                msf.get_second(),
+                msf.get_minute_length()
+            );
+            print!("{}", str_datetime(&rdt, str_weekday(rdt.get_weekday()), dst));
+            println!(" DUT1={}", str_i8(msf.get_dut1()));
+            if !msf.end_of_minute_marker_present(false) {
+                println!("End-of-minute marker absent");
+            }
+            for parity in str_parities(&msf) {
+                println!("{parity}");
+            }
+            for jump in str_jumps(&rdt) {
+                println!("{}", jump);
+            }
+            println!();
+        }
+        msf.increase_second();
+    }
+}
 
 /// Append the given bit pair to the current MSF structure and to the given buffer for later
 /// displaying.
