@@ -5,12 +5,12 @@ fn main() {
     let mut cmd_args = env::args();
     let program_name = cmd_args.next();
     if cmd_args.len() != 2 {
-        eprintln!("Usage: {} logtype logfile", program_name.unwrap());
+        eprintln!("Usage: {} station_name logfile", program_name.unwrap());
         return;
     }
     let station_name = cmd_args.next().unwrap().to_lowercase();
     if station_name != "dcf77" && station_name != "msf" {
-        eprintln!("logtype must be 'dcf77' or 'msf' but is '{station_name}'");
+        eprintln!("station_name must be 'dcf77' or 'msf' but is '{station_name}'");
         return;
     }
     let filename = cmd_args.next().unwrap();
