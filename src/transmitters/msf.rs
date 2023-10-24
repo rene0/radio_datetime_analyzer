@@ -1,7 +1,6 @@
-use msf60_utils::MSFUtils;
-use radio_datetime_utils::RadioDateTimeUtils;
-use std::cmp::Ordering;
 use crate::{str_datetime, str_jumps};
+use msf60_utils::MSFUtils;
+use std::cmp::Ordering;
 
 /// Analyze a MSF logfile.
 ///
@@ -16,20 +15,21 @@ pub fn analyze_buffer(buffer: String) /*-> Vec<&str>*/ {
         }
         append_bits(&mut msf, c, &mut msf_buffer);
         if c == '\n' {
-            let rdt: RadioDateTimeUtils;
-            let dst: Option<u8>;
             print!("{}", str_bits(&msf_buffer, msf.get_minute_length()));
             msf.decode_time();
             msf.force_new_minute();
-            rdt = msf.get_radio_datetime();
-            dst = rdt.get_dst();
+            let rdt = msf.get_radio_datetime();
+            let dst = rdt.get_dst();
             println!(
                 "first_minute={} second={} minute_length={}",
                 msf.get_first_minute(),
                 msf.get_second(),
                 msf.get_minute_length()
             );
-            print!("{}", str_datetime(&rdt, str_weekday(rdt.get_weekday()), dst));
+            print!(
+                "{}",
+                str_datetime(&rdt, str_weekday(rdt.get_weekday()), dst)
+            );
             println!(" DUT1={}", str_i8(msf.get_dut1()));
             if !msf.end_of_minute_marker_present(false) {
                 println!("End-of-minute marker absent");

@@ -1,6 +1,5 @@
-use dcf77_utils::DCF77Utils;
-use radio_datetime_utils::RadioDateTimeUtils;
 use crate::{str_datetime, str_jumps};
+use dcf77_utils::DCF77Utils;
 
 /// Analyze a DCF77 logfile.
 ///
@@ -15,16 +14,14 @@ pub fn analyze_buffer(buffer: String) /*-> Vec<&str>*/ {
         append_bit(&mut dcf77, c);
         print!("{}", str_bit(&dcf77, c));
         if c == '\n' {
-            let rdt: RadioDateTimeUtils;
-            let dst: Option<u8>;
             // force-feed the missing EOM bit
             dcf77.set_current_bit(None);
             dcf77.increase_second();
 
             dcf77.decode_time();
             dcf77.force_new_minute();
-            rdt = dcf77.get_radio_datetime();
-            dst = rdt.get_dst();
+            let rdt = dcf77.get_radio_datetime();
+            let dst = rdt.get_dst();
             println!(
                 "first_minute={} second={} this_minute_length={} next_minute_length={}",
                 dcf77.get_first_minute(),
@@ -32,13 +29,13 @@ pub fn analyze_buffer(buffer: String) /*-> Vec<&str>*/ {
                 dcf77.get_this_minute_length(),
                 dcf77.get_next_minute_length()
             );
-            print!("{}", str_datetime(&rdt, str_weekday(rdt.get_weekday()), dst));
+            print!(
+                "{}",
+                str_datetime(&rdt, str_weekday(rdt.get_weekday()), dst)
+            );
             println!(
                 " [{}] [{}]",
-                leap_second_info(
-                    rdt.get_leap_second(),
-                    dcf77.get_leap_second_is_one(),
-                ),
+                leap_second_info(rdt.get_leap_second(), dcf77.get_leap_second_is_one()),
                 str_call_bit(&dcf77),
             );
             println!(
