@@ -65,7 +65,7 @@ pub fn analyze_buffer(buffer: String) /*-> Vec<&str>*/ {
 /// # Arguments
 /// `dcf77` - the structure to append the bit to
 /// `c` - the bit to add. The newline is there to force a new minute, it is a not a bit in itself.
-pub fn append_bit(dcf77: &mut DCF77Utils, c: char) {
+fn append_bit(dcf77: &mut DCF77Utils, c: char) {
     if c != '\n' {
         dcf77.set_current_bit(match c {
             '0' => Some(false),
@@ -81,7 +81,7 @@ pub fn append_bit(dcf77: &mut DCF77Utils, c: char) {
 /// # Arguments
 /// * `dcf77` - DCF77 structure containing the second counter
 /// * `c` the bit to stringify
-pub fn str_bit(dcf77: &DCF77Utils, c: char) -> String {
+fn str_bit(dcf77: &DCF77Utils, c: char) -> String {
     let mut bit = String::from("");
     if [1, 15, 16, 19, 20, 21, 28, 29, 35, 36, 42, 45, 50, 58, 59].contains(&dcf77.get_second()) {
         bit.push(' ');
@@ -94,7 +94,7 @@ pub fn str_bit(dcf77: &DCF77Utils, c: char) -> String {
 ///
 /// # Arguments
 /// * `value` - the value to stringify, if any.
-pub fn str_hex(value: Option<u16>) -> String {
+fn str_hex(value: Option<u16>) -> String {
     if let Some(s_value) = value {
         format!("0x{s_value:>04x}")
     } else {
@@ -107,7 +107,7 @@ pub fn str_hex(value: Option<u16>) -> String {
 /// # Arguments
 /// * `leap_second` - leap second value as decoded by radio_datetime_utils
 /// * `is_one` - the bit value of the leap second (if any)
-pub fn leap_second_info(leap_second: Option<u8>, is_one: Option<bool>) -> String {
+fn leap_second_info(leap_second: Option<u8>, is_one: Option<bool>) -> String {
     let mut s = String::from("");
     if let Some(s_leap) = leap_second {
         let mut need_comma = false;
@@ -141,7 +141,7 @@ pub fn leap_second_info(leap_second: Option<u8>, is_one: Option<bool>) -> String
 ///
 /// # Arguments
 /// * `weekday` - optional weekday to stringify
-pub fn str_weekday(weekday: Option<u8>) -> String {
+fn str_weekday(weekday: Option<u8>) -> String {
     String::from(match weekday {
         Some(1) => "Monday",
         Some(2) => "Tuesday",
@@ -164,7 +164,7 @@ pub fn str_weekday(weekday: Option<u8>) -> String {
 ///
 /// # Arguments
 /// * `dcf77` - structure holding the currently decoded DCF77 data
-pub fn str_parities(dcf77: &DCF77Utils) -> Vec<&str> {
+fn str_parities(dcf77: &DCF77Utils) -> Vec<&str> {
     let mut parities = Vec::new();
     if dcf77.get_parity_1() == Some(true) {
         parities.push("Minute parity bad");
@@ -188,7 +188,7 @@ pub fn str_parities(dcf77: &DCF77Utils) -> Vec<&str> {
 ///
 /// # Arguments
 /// * `dcf77` - structure holding the currently decoded DCF77 data
-pub fn str_call_bit(dcf77: &DCF77Utils) -> String {
+fn str_call_bit(dcf77: &DCF77Utils) -> String {
     String::from(match dcf77.get_call_bit() {
         Some(false) => "",
         Some(true) => "call",
@@ -200,7 +200,7 @@ pub fn str_call_bit(dcf77: &DCF77Utils) -> String {
 ///
 /// # Arguments
 /// * `dcf77` - structure holding the currently decoded DCF77 data
-pub fn str_check_bits(dcf77: &DCF77Utils) -> Vec<&str> {
+fn str_check_bits(dcf77: &DCF77Utils) -> Vec<&str> {
     let mut checks = Vec::new();
     if dcf77.get_bit_0() == Some(true) {
         checks.push("Bit 0 is wrong");

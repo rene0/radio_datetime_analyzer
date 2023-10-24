@@ -54,7 +54,7 @@ pub fn analyze_buffer(buffer: String) /*-> Vec<&str>*/ {
 /// * `c` - the bit pair to add. The newline is there to force a new minute, it is a not a bit pair
 ///         in itself.
 /// * `buffer` - buffer storing the bits for later displaying
-pub fn append_bits(msf: &mut MSFUtils, c: char, buffer: &mut [char]) {
+fn append_bits(msf: &mut MSFUtils, c: char, buffer: &mut [char]) {
     if c != '\n' {
         // 4 is the 500ms long BOM marker
         msf.set_current_bit_a(match c {
@@ -79,7 +79,7 @@ pub fn append_bits(msf: &mut MSFUtils, c: char, buffer: &mut [char]) {
 /// # Arguments
 /// * `buffer` - the buffer to stringify
 /// * `minute_length` - the number of bit pairs in this minute
-pub fn str_bits(buffer: &[char], minute_length: u8) -> String {
+fn str_bits(buffer: &[char], minute_length: u8) -> String {
     let mut bits = String::from("");
     let offset = match 60.cmp(&minute_length) {
         Ordering::Less => 1,
@@ -116,7 +116,7 @@ pub fn str_bits(buffer: &[char], minute_length: u8) -> String {
 ///
 /// # Arguments
 /// * `weekday` - optional weekday to stringify
-pub fn str_weekday(weekday: Option<u8>) -> String {
+fn str_weekday(weekday: Option<u8>) -> String {
     String::from(match weekday {
         Some(0) => "Sunday",
         Some(1) => "Monday",
@@ -139,7 +139,7 @@ pub fn str_weekday(weekday: Option<u8>) -> String {
 ///
 /// # Arguments
 /// * `value` - value to stringify
-pub fn str_i8(value: Option<i8>) -> String {
+fn str_i8(value: Option<i8>) -> String {
     if let Some(s_value) = value {
         format!("{s_value}")
     } else {
@@ -151,7 +151,7 @@ pub fn str_i8(value: Option<i8>) -> String {
 ///
 /// # Arguments
 /// * `msf` - structure holding the currently decoded MSF data
-pub fn str_parities(msf: &MSFUtils) -> Vec<&str> {
+fn str_parities(msf: &MSFUtils) -> Vec<&str> {
     let mut parities = Vec::new();
     if msf.get_parity_1() == Some(false) {
         parities.push("Year parity bad");
