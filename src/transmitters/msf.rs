@@ -2,12 +2,13 @@ use crate::{str_datetime, str_jumps};
 use msf60_utils::MSFUtils;
 use std::cmp::Ordering;
 
-/// Analyze a MSF logfile.
+/// Analyze a MSF logfile, return the input with the results interleaved.
 ///
 /// # Arguments
 /// `buffer` - the buffer containing the MSF logfile
-pub fn analyze_buffer(buffer: String) /*-> Vec<&str>*/ {
+pub fn analyze_buffer(buffer: &str) -> Vec<String> {
     let mut msf = MSFUtils::default();
+    let mut res = Vec::new();
     let mut msf_buffer = [' '; msf60_utils::BIT_BUFFER_SIZE];
     for c in buffer.chars() {
         if !['0', '1', '2', '3', '4', '_', '\n'].contains(&c) {
@@ -15,35 +16,33 @@ pub fn analyze_buffer(buffer: String) /*-> Vec<&str>*/ {
         }
         append_bits(&mut msf, c, &mut msf_buffer);
         if c == '\n' {
-            print!("{}", str_bits(&msf_buffer, msf.get_minute_length()));
+            res.push(str_bits(&msf_buffer, msf.get_minute_length()));
             msf.decode_time();
             msf.force_new_minute();
             let rdt = msf.get_radio_datetime();
             let dst = rdt.get_dst();
-            println!(
-                "first_minute={} second={} minute_length={}",
+            res.push(format!(
+                "first_minute={} second={} minute_length={}\n",
                 msf.get_first_minute(),
                 msf.get_second(),
                 msf.get_minute_length()
-            );
-            print!(
-                "{}",
-                str_datetime(&rdt, str_weekday(rdt.get_weekday()), dst)
-            );
-            println!(" DUT1={}", str_i8(msf.get_dut1()));
+            ));
+            res.push(str_datetime(&rdt, str_weekday(rdt.get_weekday()), dst));
+            res.push(format!(" DUT1={}\n", str_i8(msf.get_dut1())));
             if !msf.end_of_minute_marker_present(false) {
-                println!("End-of-minute marker absent");
+                res.push(String::from("End-of-minute marker absent\n"));
             }
             for parity in str_parities(&msf) {
-                println!("{parity}");
+                res.push(format!("{parity}\n"));
             }
             for jump in str_jumps(&rdt) {
-                println!("{}", jump);
+                res.push(format!("{jump}\n"));
             }
-            println!();
+            res.push(String::from("\n"));
         }
         msf.increase_second();
     }
+    res
 }
 
 /// Append the given bit pair to the current MSF structure and to the given buffer for later
@@ -179,6 +178,9 @@ fn str_parities(msf: &MSFUtils) -> Vec<&str> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_analyze_logfile() {}
 
     #[test]
     #[should_panic]

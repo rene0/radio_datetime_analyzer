@@ -19,14 +19,12 @@ fn main() {
         eprintln!("Could not read file '{}' : {s_error}", &filename);
         return;
     }
-    match station_name.as_str() {
-        "dcf77" => {
-            let res = transmitters::dcf77::analyze_buffer(&buffer.unwrap());
-            for r in res {
-                print!("{r}");
-            }
-        }
-        "msf" => transmitters::msf::analyze_buffer(buffer.unwrap()),
-        _ => {}
+    let res = match station_name.as_str() {
+        "dcf77" => transmitters::dcf77::analyze_buffer(&buffer.unwrap()),
+        "msf" => transmitters::msf::analyze_buffer(&buffer.unwrap()),
+        _ => Vec::new(),
+    };
+    for r in res {
+        print!("{r}");
     }
 }
