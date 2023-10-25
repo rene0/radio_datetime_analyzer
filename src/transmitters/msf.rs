@@ -180,7 +180,55 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_analyze_logfile() {}
+    fn test_analyze_logfile() {
+        const LOG: &str = "400000000220000000010000000011101000110100011101100101133110
+400000000220000000010000000011101001000000000000000003113310
+400000000220000000010000000011101001000000000000000103113110
+400000000220000000010000000011101001000000000101100003113110
+400000000220000000010000000011101001000000000101100103113310
+400000000220000000010000000011101001000000010000000003113130
+400000000220000000010000000011101001000000010000000101113330
+";
+        let analyzed = vec![
+            String::from("4 00000000 22000000 00100000 00011 101000 110 100011 1011001 01133110\n"),
+            String::from("first_minute=true second=60 minute_length=60\n"),
+            String::from("20-03-28 Saturday 23:59 [winter]"),
+            String::from(" DUT1=-2\n"),
+            String::from("\n"),
+            String::from("4 00000000 22000000 00100000 00011 101001 000 000000 0000000 03113310\n"),
+            String::from("first_minute=false second=60 minute_length=60\n"),
+            String::from("20-03-29 Sunday 00:00 [winter]"),
+            String::from(" DUT1=-2\n"),
+            String::from("\n"),
+            String::from("4 00000000 22000000 00100000 00011 101001 000 000000 0000001 03113110\n"),
+            String::from("first_minute=false second=60 minute_length=60\n"),
+            String::from("20-03-29 Sunday 00:01 [announced,winter]"),
+            String::from(" DUT1=-2\n"),
+            String::from("\n"),
+            String::from("4 00000000 22000000 00100000 00011 101001 000 000000 1011000 03113110\n"),
+            String::from("first_minute=false second=60 minute_length=60\n"),
+            String::from("20-03-29 Sunday 00:58 [announced,winter]"),
+            String::from(" DUT1=-2\n"),
+            String::from("Minute jumped\n"),
+            String::from("\n"),
+            String::from("4 00000000 22000000 00100000 00011 101001 000 000000 1011001 03113310\n"),
+            String::from("first_minute=false second=60 minute_length=60\n"),
+            String::from("20-03-29 Sunday 00:59 [announced,winter]"),
+            String::from(" DUT1=-2\n"),
+            String::from("\n"),
+            String::from("4 00000000 22000000 00100000 00011 101001 000 000010 0000000 03113130\n"),
+            String::from("first_minute=false second=60 minute_length=60\n"),
+            String::from("20-03-29 Sunday 02:00 [processed,summer]"),
+            String::from(" DUT1=-2\n"),
+            String::from("\n"),
+            String::from("4 00000000 22000000 00100000 00011 101001 000 000010 0000001 01113330\n"),
+            String::from("first_minute=false second=60 minute_length=60\n"),
+            String::from("20-03-29 Sunday 02:01 [summer]"),
+            String::from(" DUT1=-2\n"),
+            String::from("\n"),
+        ];
+        assert_eq!(analyze_buffer(LOG), analyzed);
+    }
 
     #[test]
     #[should_panic]
@@ -238,9 +286,10 @@ mod tests {
             '1', '0', '0', '0', '1', '1', // 38-43
             '0', '0', '1', '0', '1', '1', '0', // 44-50
             '0', '1', '1', '3', '1', '3', '3', '0', // 51-58
-            '\n'
+            '\n',
         ];
-        const WANTED: &str = "4 00000000 0000000 00100011 10000 100011 001 100011 0010110 01131330\n";
+        const WANTED: &str =
+            "4 00000000 0000000 00100011 10000 100011 001 100011 0010110 01131330\n";
         assert_eq!(str_bits(&BUFFER, 59), WANTED);
         assert_eq!(str_bits(&[BUFFER, BUFFER].concat(), 59), WANTED);
     }
@@ -258,7 +307,7 @@ mod tests {
             '1', '0', '0', '0', '1', '1', // 39-44
             '0', '0', '1', '0', '1', '1', '0', // 45-51
             '0', '1', '1', '3', '1', '3', '3', '0', // 52-59
-            '\n'
+            '\n',
         ];
         const WANTED: &str =
             "4 00000000 00000000 00100011 10000 100011 001 100011 0010110 01131330\n";
@@ -280,7 +329,7 @@ mod tests {
             '1', '0', '0', '0', '1', '1', // 40-45
             '0', '0', '1', '0', '1', '1', '0', // 46-52
             '0', '1', '1', '3', '1', '3', '3', '0', // 53-60
-            '\n'
+            '\n',
         ];
         const WANTED: &str =
             "4 00000000 000000000 00100011 10000 100011 001 100011 0010110 01131330\n";
