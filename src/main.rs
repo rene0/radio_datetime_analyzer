@@ -20,7 +20,12 @@ fn main() {
         return;
     }
     match station_name.as_str() {
-        "dcf77" => transmitters::dcf77::analyze_buffer(buffer.unwrap()),
+        "dcf77" => {
+            let res = transmitters::dcf77::analyze_buffer(&buffer.unwrap());
+            for r in res {
+                print!("{r}");
+            }
+        }
         "msf" => transmitters::msf::analyze_buffer(buffer.unwrap()),
         _ => {}
     }

@@ -1,18 +1,19 @@
 use crate::{str_datetime, str_jumps};
 use dcf77_utils::DCF77Utils;
 
-/// Analyze a DCF77 logfile.
+/// Analyze a DCF77 logfile, return the input with the results interleaved.
 ///
 /// # Arguments
 /// `buffer` - the buffer containing the DCF77 logfile
-pub fn analyze_buffer(buffer: String) /*-> Vec<&str>*/ {
+pub fn analyze_buffer(buffer: &str) -> Vec<String> {
     let mut dcf77 = DCF77Utils::default();
+    let mut res = Vec::new();
     for c in buffer.chars() {
         if !['0', '1', '_', '\n'].contains(&c) {
             continue;
         }
         append_bit(&mut dcf77, c);
-        print!("{}", str_bit(&dcf77, c));
+        res.push(str_bit(&dcf77, c));
         if c == '\n' {
             // force-feed the missing EOM bit
             dcf77.set_current_bit(None);
@@ -22,39 +23,37 @@ pub fn analyze_buffer(buffer: String) /*-> Vec<&str>*/ {
             dcf77.force_new_minute();
             let rdt = dcf77.get_radio_datetime();
             let dst = rdt.get_dst();
-            println!(
-                "first_minute={} second={} this_minute_length={} next_minute_length={}",
+            res.push(format!(
+                "first_minute={} second={} this_minute_length={} next_minute_length={}\n",
                 dcf77.get_first_minute(),
                 dcf77.get_second(),
                 dcf77.get_this_minute_length(),
                 dcf77.get_next_minute_length()
-            );
-            print!(
-                "{}",
-                str_datetime(&rdt, str_weekday(rdt.get_weekday()), dst)
-            );
-            println!(
-                " [{}] [{}]",
+            ));
+            res.push(str_datetime(&rdt, str_weekday(rdt.get_weekday()), dst));
+            res.push(format!(
+                " [{}] [{}]\n",
                 leap_second_info(rdt.get_leap_second(), dcf77.get_leap_second_is_one()),
                 str_call_bit(&dcf77),
-            );
-            println!(
-                "Third-party buffer={}",
+            ));
+            res.push(format!(
+                "Third-party buffer={}\n",
                 str_hex(dcf77.get_third_party_buffer())
-            );
+            ));
             for parity in str_parities(&dcf77) {
-                println!("{parity}")
+                res.push(format!("{parity}\n"));
             }
             for check in str_check_bits(&dcf77) {
-                println!("{check}")
+                res.push(format!("{check}\n"));
             }
             for jump in str_jumps(&rdt) {
-                println!("{}", jump);
+                res.push(format!("{jump}\n"));
             }
-            println!();
+            res.push(String::from("\n"));
         }
         dcf77.increase_second();
     }
+    res
 }
 
 /// Append the given bit to the current DCF77 structure
@@ -216,6 +215,9 @@ fn str_check_bits(dcf77: &DCF77Utils) -> Vec<&str> {
 mod tests {
     use super::*;
     use radio_datetime_utils::{LEAP_ANNOUNCED, LEAP_MISSING, LEAP_PROCESSED};
+
+    #[test]
+    fn test_analyze_logfile() {}
 
     const LE_EMPTY: &str = "";
     const LE_ANN: &str = "announced";
