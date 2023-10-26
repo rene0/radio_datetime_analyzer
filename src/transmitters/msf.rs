@@ -15,28 +15,37 @@ pub fn analyze_buffer(buffer: &str) -> Vec<String> {
             continue;
         }
         append_bits(&mut msf, c, &mut msf_buffer);
+        let actual_len = msf.get_second();
+        let wanted_len = msf.get_minute_length();
         if c == '\n' {
-            res.push(str_bits(&msf_buffer, msf.get_minute_length()));
-            msf.decode_time();
-            msf.force_new_minute();
-            let rdt = msf.get_radio_datetime();
-            let dst = rdt.get_dst();
-            res.push(format!(
-                "first_minute={} second={} minute_length={}\n",
-                msf.get_first_minute(),
-                msf.get_second(),
-                msf.get_minute_length()
-            ));
-            res.push(str_datetime(&rdt, str_weekday(rdt.get_weekday()), dst));
-            res.push(format!(" DUT1={}\n", str_i8(msf.get_dut1())));
-            if !msf.end_of_minute_marker_present(false) {
-                res.push(String::from("End-of-minute marker absent\n"));
-            }
-            for parity in str_parities(&msf) {
-                res.push(format!("{parity}\n"));
-            }
-            for jump in str_jumps(&rdt) {
-                res.push(format!("{jump}\n"));
+            if actual_len == wanted_len {
+                res.push(str_bits(&msf_buffer, wanted_len));
+                msf.decode_time();
+                msf.force_new_minute();
+                let rdt = msf.get_radio_datetime();
+                let dst = rdt.get_dst();
+                res.push(format!(
+                    "first_minute={} second={} minute_length={}\n",
+                    msf.get_first_minute(),
+                    msf.get_second(),
+                    wanted_len
+                ));
+                res.push(str_datetime(&rdt, str_weekday(rdt.get_weekday()), dst));
+                res.push(format!(" DUT1={}\n", str_i8(msf.get_dut1())));
+                if !msf.end_of_minute_marker_present(false) {
+                    res.push(String::from("End-of-minute marker absent\n"));
+                }
+                for parity in str_parities(&msf) {
+                    res.push(format!("{parity}\n"));
+                }
+                for jump in str_jumps(&rdt) {
+                    res.push(format!("{jump}\n"));
+                }
+            } else {
+                res.push(format!(
+                    "Minute is {actual_len} seconds instead of {wanted_len} seconds long\n"
+                ));
+                msf.force_new_minute();
             }
             res.push(String::from("\n"));
         }
@@ -184,6 +193,8 @@ mod tests {
         const LOG: &str = "400000000220000000010000000011101000110100011101100101133110
 400000000220000000010000000011101001000000000000000003113310
 400000000220000000010000000011101001000000000000000103113110
+=
+400
 400000000220000000010000000011101001000000000101100003113110
 400000000220000000010000000011101001000000000101100103113310
 400000000220000000010000000011101001000000010000000003113130
@@ -204,6 +215,10 @@ mod tests {
             String::from("first_minute=false second=60 minute_length=60\n"),
             String::from("20-03-29 Sunday 00:01 [announced,winter]"),
             String::from(" DUT1=-2\n"),
+            String::from("\n"),
+            String::from("Minute is 0 seconds instead of 60 seconds long\n"),
+            String::from("\n"),
+            String::from("Minute is 3 seconds instead of 60 seconds long\n"),
             String::from("\n"),
             String::from("4 00000000 22000000 00100000 00011 101001 000 000000 1011000 03113110\n"),
             String::from("first_minute=false second=60 minute_length=60\n"),
