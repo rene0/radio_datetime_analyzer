@@ -22,7 +22,7 @@ dependencies = [
 
 [[package]]
 name = "radio_datetime_analyzer"
-version = "0.1.2"
+version = "0.1.3"
 dependencies = [
  "dcf77_utils",
  "msf60_utils",
