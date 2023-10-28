@@ -223,21 +223,21 @@ mod tests {
             String::from("20-03-29 Sunday 00:01 [announced,winter]"),
             String::from(" DUT1=-2\n"),
             String::from("\n"),
-            String::from("Minute is 0 seconds instead of 60 seconds long\n"),
+            String::from("Minute is 0 seconds instead of 60 seconds long\n"), // test empty(?) minute
             String::from("\n"),
-            String::from("Minute is 3 seconds instead of 60 seconds long\n"),
+            String::from("Minute is 3 seconds instead of 60 seconds long\n"), // test incomplete minute
             String::from("\n"),
             String::from("4 00000000 22000000 00100000 00011 101001 000 000000 0000100 03113110\n"),
             String::from("first_minute=false second=60 minute_length=60\n"),
             String::from("20-03-29 Sunday 00:04 [announced,winter]"),
             String::from(" DUT1=-2\n"),
-            String::from("Minute jumped\n"),
+            String::from("Minute jumped\n"), // 00:01 -> 00:04
             String::from("\n"),
             String::from("4 00000000 22000000 00100000 00011 101001 000 000000 0000101 03112310\n"),
             String::from("first_minute=false second=60 minute_length=60\n"),
             String::from("20-03-29 Sunday 00:05 [announced,winter]"),
             String::from(" DUT1=-2\n"),
-            String::from("End-of-minute marker absent\n"),
+            String::from("End-of-minute marker absent\n"), // note the '2' in the last word
             String::from("\n"),
             String::from("4 00000000 22000000 00100000 00011 101001 000 000000 0000110 03113310\n"),
             String::from("first_minute=false second=60 minute_length=60\n"),
@@ -245,7 +245,7 @@ mod tests {
             String::from(" DUT1=-2\n"),
             String::from("\n"),
             String::from("4 00000000 2200000 00100000 00011 101001 000 000000 0000111 03113110\n"),
-            String::from("first_minute=false second=59 minute_length=59\n"),
+            String::from("first_minute=false second=59 minute_length=59\n"), // artificially remove bit 16
             String::from("20-03-29 Sunday 00:07 [announced,winter]"),
             String::from(" DUT1=-2\n"),
             String::from("\n"),
@@ -258,7 +258,7 @@ mod tests {
                 "4 00000000 220000000 00100000 00011 101001 000 000000 0001001 03113310\n",
             ),
             String::from("first_minute=false second=61 minute_length=61\n"),
-            String::from("20-03-29 Sunday 00:09 [announced,winter]"),
+            String::from("20-03-29 Sunday 00:09 [announced,winter]"), // artificially add a second bit 16
             String::from(" DUT1=-2\n"),
             String::from("\n"),
             String::from("4 00000000 22000000 00100000 00011 101001 000 000000 0010000 03113110\n"),
@@ -270,7 +270,7 @@ mod tests {
             String::from("first_minute=false second=60 minute_length=60\n"),
             String::from("20-03-29 Sunday 00:58 [announced,winter]"),
             String::from(" DUT1=-2\n"),
-            String::from("Minute jumped\n"),
+            String::from("Minute jumped\n"), // 00:10 -> 00:58
             String::from("\n"),
             String::from("4 00000000 22000000 00100000 00011 101001 000 000000 1011001 03113310\n"),
             String::from("first_minute=false second=60 minute_length=60\n"),
@@ -279,7 +279,7 @@ mod tests {
             String::from("\n"),
             String::from("4 00000000 22000000 00100000 00011 101001 000 000010 0000000 03113130\n"),
             String::from("first_minute=false second=60 minute_length=60\n"),
-            String::from("20-03-29 Sunday 02:00 [processed,summer]"),
+            String::from("20-03-29 Sunday 02:00 [processed,summer]"), // correct DST transition
             String::from(" DUT1=-2\n"),
             String::from("\n"),
             String::from("4 00000000 22000000 00100000 00011 101001 000 000010 0000001 01113330\n"),
