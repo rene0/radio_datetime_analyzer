@@ -92,7 +92,9 @@ fn append_bit(dcf77: &mut DCF77Utils, c: char) {
 /// * `c` the bit to stringify
 fn str_bit(dcf77: &DCF77Utils, c: char) -> String {
     let mut bit = String::from("");
-    if [1, 15, 16, 19, 20, 21, 28, 29, 35, 36, 42, 45, 50, 58, 59].contains(&dcf77.get_second()) {
+    if c != '\n'
+        && [1, 15, 16, 19, 20, 21, 28, 29, 35, 36, 42, 45, 50, 58, 59].contains(&dcf77.get_second())
+    {
         bit.push(' ');
     }
     bit.push(c);
