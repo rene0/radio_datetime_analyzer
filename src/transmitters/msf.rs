@@ -195,6 +195,13 @@ mod tests {
 400000000220000000010000000011101001000000000000000103113110
 =
 400
+400000000220000000010000000011101001000000000000010003113110
+400000000220000000010000000011101001000000000000010103112310
+400000000220000000010000000011101001000000000000011003113310
+40000000022000000010000000011101001000000000000011103113110
+400000000220000000010000000011101001000000000000100003113110
+4000000002200000000010000000011101001000000000000100103113310
+400000000220000000010000000011101001000000000001000003113110
 400000000220000000010000000011101001000000000101100003113110
 400000000220000000010000000011101001000000000101100103113310
 400000000220000000010000000011101001000000010000000003113130
@@ -219,6 +226,45 @@ mod tests {
             String::from("Minute is 0 seconds instead of 60 seconds long\n"),
             String::from("\n"),
             String::from("Minute is 3 seconds instead of 60 seconds long\n"),
+            String::from("\n"),
+            String::from("4 00000000 22000000 00100000 00011 101001 000 000000 0000100 03113110\n"),
+            String::from("first_minute=false second=60 minute_length=60\n"),
+            String::from("20-03-29 Sunday 00:04 [announced,winter]"),
+            String::from(" DUT1=-2\n"),
+            String::from("Minute jumped\n"),
+            String::from("\n"),
+            String::from("4 00000000 22000000 00100000 00011 101001 000 000000 0000101 03112310\n"),
+            String::from("first_minute=false second=60 minute_length=60\n"),
+            String::from("20-03-29 Sunday 00:05 [announced,winter]"),
+            String::from(" DUT1=-2\n"),
+            String::from("End-of-minute marker absent\n"),
+            String::from("\n"),
+            String::from("4 00000000 22000000 00100000 00011 101001 000 000000 0000110 03113310\n"),
+            String::from("first_minute=false second=60 minute_length=60\n"),
+            String::from("20-03-29 Sunday 00:06 [announced,winter]"),
+            String::from(" DUT1=-2\n"),
+            String::from("\n"),
+            String::from("4 00000000 2200000 00100000 00011 101001 000 000000 0000111 03113110\n"),
+            String::from("first_minute=false second=59 minute_length=59\n"),
+            String::from("20-03-29 Sunday 00:07 [announced,winter]"),
+            String::from(" DUT1=-2\n"),
+            String::from("\n"),
+            String::from("4 00000000 22000000 00100000 00011 101001 000 000000 0001000 03113110\n"),
+            String::from("first_minute=false second=60 minute_length=60\n"),
+            String::from("20-03-29 Sunday 00:08 [announced,winter]"),
+            String::from(" DUT1=-2\n"),
+            String::from("\n"),
+            String::from(
+                "4 00000000 220000000 00100000 00011 101001 000 000000 0001001 03113310\n",
+            ),
+            String::from("first_minute=false second=61 minute_length=61\n"),
+            String::from("20-03-29 Sunday 00:09 [announced,winter]"),
+            String::from(" DUT1=-2\n"),
+            String::from("\n"),
+            String::from("4 00000000 22000000 00100000 00011 101001 000 000000 0010000 03113110\n"),
+            String::from("first_minute=false second=60 minute_length=60\n"),
+            String::from("20-03-29 Sunday 00:10 [announced,winter]"),
+            String::from(" DUT1=-2\n"),
             String::from("\n"),
             String::from("4 00000000 22000000 00100000 00011 101001 000 000000 1011000 03113110\n"),
             String::from("first_minute=false second=60 minute_length=60\n"),
