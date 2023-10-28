@@ -32,7 +32,7 @@ pub fn analyze_buffer(buffer: &str) -> Vec<String> {
                 res.push(format!(
                     "first_minute={} second={} this_minute_length={} next_minute_length={}\n",
                     dcf77.get_first_minute(),
-                    dcf77.get_second(),
+                    actual_len,
                     dcf77.get_this_minute_length(),
                     dcf77.get_next_minute_length()
                 ));
