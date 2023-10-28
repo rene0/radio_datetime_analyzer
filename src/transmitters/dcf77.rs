@@ -18,36 +18,46 @@ pub fn analyze_buffer(buffer: &str) -> Vec<String> {
             // force-feed the missing EOM bit
             dcf77.set_current_bit(None);
             dcf77.increase_second();
-
-            dcf77.decode_time();
-            dcf77.force_new_minute();
-            let rdt = dcf77.get_radio_datetime();
-            let dst = rdt.get_dst();
-            res.push(format!(
-                "first_minute={} second={} this_minute_length={} next_minute_length={}\n",
-                dcf77.get_first_minute(),
-                dcf77.get_second(),
-                dcf77.get_this_minute_length(),
-                dcf77.get_next_minute_length()
-            ));
-            res.push(str_datetime(&rdt, str_weekday(rdt.get_weekday()), dst));
-            res.push(format!(
-                " [{}] [{}]\n",
-                leap_second_info(rdt.get_leap_second(), dcf77.get_leap_second_is_one()),
-                str_call_bit(&dcf77),
-            ));
-            res.push(format!(
-                "Third-party buffer={}\n",
-                str_hex(dcf77.get_third_party_buffer())
-            ));
-            for parity in str_parities(&dcf77) {
-                res.push(format!("{parity}\n"));
-            }
-            for check in str_check_bits(&dcf77) {
-                res.push(format!("{check}\n"));
-            }
-            for jump in str_jumps(&rdt) {
-                res.push(format!("{jump}\n"));
+        }
+        let actual_len = dcf77.get_second();
+        let wanted_len = dcf77.get_this_minute_length();
+        if c == '\n' {
+            if actual_len == wanted_len {
+                dcf77.decode_time();
+                dcf77.force_new_minute();
+                let rdt = dcf77.get_radio_datetime();
+                let dst = rdt.get_dst();
+                res.push(format!(
+                    "first_minute={} second={} this_minute_length={} next_minute_length={}\n",
+                    dcf77.get_first_minute(),
+                    dcf77.get_second(),
+                    dcf77.get_this_minute_length(),
+                    dcf77.get_next_minute_length()
+                ));
+                res.push(str_datetime(&rdt, str_weekday(rdt.get_weekday()), dst));
+                res.push(format!(
+                    " [{}] [{}]\n",
+                    leap_second_info(rdt.get_leap_second(), dcf77.get_leap_second_is_one()),
+                    str_call_bit(&dcf77),
+                ));
+                res.push(format!(
+                    "Third-party buffer={}\n",
+                    str_hex(dcf77.get_third_party_buffer())
+                ));
+                for parity in str_parities(&dcf77) {
+                    res.push(format!("{parity}\n"));
+                }
+                for check in str_check_bits(&dcf77) {
+                    res.push(format!("{check}\n"));
+                }
+                for jump in str_jumps(&rdt) {
+                    res.push(format!("{jump}\n"));
+                }
+            } else {
+                res.push(format!(
+                    "Minute is {actual_len} seconds instead of {wanted_len} seconds long\n"
+                ));
+                dcf77.force_new_minute();
             }
             res.push(String::from("\n"));
         }
