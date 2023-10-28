@@ -21,13 +21,13 @@ pub fn analyze_buffer(buffer: &str) -> Vec<String> {
             dcf77.increase_second();
         }
         let actual_len = dcf77.get_second();
-        let wanted_len = dcf77.get_this_minute_length();
+        let wanted_len = dcf77.get_next_minute_length();
         if c == '\n' {
             res.push(bits.clone());
             bits.clear();
             if actual_len == wanted_len {
                 dcf77.decode_time();
-                dcf77.force_new_minute();
+                dcf77.force_new_minute(); // (this, next) = (next, new_next)
                 let rdt = dcf77.get_radio_datetime();
                 res.push(format!(
                     "first_minute={} second={} this_minute_length={} next_minute_length={}\n",
