@@ -23,14 +23,17 @@ pub fn analyze_buffer(buffer: &str) -> Vec<String> {
                 msf.decode_time();
                 msf.force_new_minute();
                 let rdt = msf.get_radio_datetime();
-                let dst = rdt.get_dst();
                 res.push(format!(
                     "first_minute={} second={} minute_length={}\n",
                     msf.get_first_minute(),
                     msf.get_second(),
                     wanted_len
                 ));
-                res.push(str_datetime(&rdt, str_weekday(rdt.get_weekday()), dst));
+                res.push(str_datetime(
+                    &rdt,
+                    str_weekday(rdt.get_weekday()),
+                    rdt.get_dst(),
+                ));
                 res.push(format!(" DUT1={}\n", str_i8(msf.get_dut1())));
                 if !msf.end_of_minute_marker_present(false) {
                     res.push(String::from("End-of-minute marker absent\n"));
