@@ -8,12 +8,13 @@ use dcf77_utils::DCF77Utils;
 pub fn analyze_buffer(buffer: &str) -> Vec<String> {
     let mut dcf77 = DCF77Utils::default();
     let mut res = Vec::new();
+    let mut bits = String::from("");
     for c in buffer.chars() {
         if !['0', '1', '_', '\n'].contains(&c) {
             continue;
         }
         append_bit(&mut dcf77, c);
-        res.push(str_bit(&dcf77, c));
+        bits.push_str(&str_bit(&dcf77, c));
         if c == '\n' {
             // force-feed the missing EOM bit
             dcf77.set_current_bit(None);
@@ -22,6 +23,8 @@ pub fn analyze_buffer(buffer: &str) -> Vec<String> {
         let actual_len = dcf77.get_second();
         let wanted_len = dcf77.get_this_minute_length();
         if c == '\n' {
+            res.push(bits.clone());
+            bits.clear();
             if actual_len == wanted_len {
                 dcf77.decode_time();
                 dcf77.force_new_minute();
