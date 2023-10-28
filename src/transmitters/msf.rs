@@ -26,7 +26,7 @@ pub fn analyze_buffer(buffer: &str) -> Vec<String> {
                 res.push(format!(
                     "first_minute={} second={} minute_length={}\n",
                     msf.get_first_minute(),
-                    msf.get_second(),
+                    actual_len,
                     wanted_len
                 ));
                 res.push(str_datetime(
