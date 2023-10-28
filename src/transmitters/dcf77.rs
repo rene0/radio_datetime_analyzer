@@ -29,7 +29,6 @@ pub fn analyze_buffer(buffer: &str) -> Vec<String> {
                 dcf77.decode_time();
                 dcf77.force_new_minute();
                 let rdt = dcf77.get_radio_datetime();
-                let dst = rdt.get_dst();
                 res.push(format!(
                     "first_minute={} second={} this_minute_length={} next_minute_length={}\n",
                     dcf77.get_first_minute(),
@@ -37,7 +36,11 @@ pub fn analyze_buffer(buffer: &str) -> Vec<String> {
                     dcf77.get_this_minute_length(),
                     dcf77.get_next_minute_length()
                 ));
-                res.push(str_datetime(&rdt, str_weekday(rdt.get_weekday()), dst));
+                res.push(str_datetime(
+                    &rdt,
+                    str_weekday(rdt.get_weekday()),
+                    rdt.get_dst(),
+                ));
                 res.push(format!(
                     " [{}] [{}]\n",
                     leap_second_info(rdt.get_leap_second(), dcf77.get_leap_second_is_one()),
