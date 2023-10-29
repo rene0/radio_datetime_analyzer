@@ -217,8 +217,8 @@ mod tests {
             String::from(" DUT1=-2\n"),
             String::from("\n"),
             String::from("4 00000000 22000000 00100000 00011 101001 000 000000 0000000 03113310\n"),
-            String::from("first_minute=false second=60 minute_length=60\n"),
-            String::from("20-03-29 Sunday 00:00 [winter]"),
+            String::from("first_minute=false second=60 minute_length=60\n"), // bit 53b not yet trusted,
+            String::from("20-03-29 Sunday 00:00 [winter]"), // radio_datetime_utils insists on minute > 0
             String::from(" DUT1=-2\n"),
             String::from("\n"),
             String::from("4 00000000 22000000 00100000 00011 101001 000 000000 0000001 03113110\n"),
