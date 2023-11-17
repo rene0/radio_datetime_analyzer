@@ -1,4 +1,4 @@
-use crate::{str_datetime, str_jumps};
+use crate::{str_datetime, str_jumps, str_weekday};
 use dcf77_utils::DCF77Utils;
 
 /// Analyze a DCF77 logfile, return the input with the results interleaved.
@@ -38,7 +38,7 @@ pub fn analyze_buffer(buffer: &str) -> Vec<String> {
                 ));
                 res.push(str_datetime(
                     &rdt,
-                    str_weekday(rdt.get_weekday()),
+                    str_weekday(rdt.get_weekday(), 7),
                     rdt.get_dst(),
                 ));
                 res.push(format!(
@@ -149,29 +149,6 @@ fn leap_second_info(leap_second: Option<u8>, is_one: Option<bool>) -> String {
         }
     }
     s
-}
-
-/// Return a textual representation of the weekday, Sunday-Saturday or ? for None.
-///
-/// # Arguments
-/// * `weekday` - optional weekday to stringify
-fn str_weekday(weekday: Option<u8>) -> String {
-    String::from(match weekday {
-        Some(1) => "Monday",
-        Some(2) => "Tuesday",
-        Some(3) => "Wednesday",
-        Some(4) => "Thursday",
-        Some(5) => "Friday",
-        Some(6) => "Saturday",
-        Some(7) => "Sunday",
-        None => "?",
-        _ => {
-            panic!(
-                "dcf77::str_weekday(): impossible weekday 'Some({})'",
-                weekday.unwrap()
-            );
-        }
-    })
 }
 
 /// Return a vector containing the parity values in plain English.

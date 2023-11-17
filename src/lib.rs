@@ -41,6 +41,29 @@ fn dst_info(dst: Option<u8>) -> String {
     s
 }
 
+/// Return a textual representation of the weekday, Sunday-Saturday or ? for None.
+///
+/// # Arguments
+/// * `weekday` - optional weekday to stringify
+fn str_weekday(weekday: Option<u8>, sunday: u8) -> String {
+    String::from(match weekday {
+        Some(0) | Some(7) if weekday == Some(sunday) => "Sunday",
+        Some(1) => "Monday",
+        Some(2) => "Tuesday",
+        Some(3) => "Wednesday",
+        Some(4) => "Thursday",
+        Some(5) => "Friday",
+        Some(6) => "Saturday",
+        None => "?",
+        _ => {
+            panic!(
+                "str_weekday(): impossible weekday 'Some({})'",
+                weekday.unwrap()
+            );
+        }
+    })
+}
+
 /// Return the part of the date and time which is common to all stations.
 ///
 /// # Arguments

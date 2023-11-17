@@ -1,4 +1,4 @@
-use crate::{str_datetime, str_jumps};
+use crate::{str_datetime, str_jumps, str_weekday};
 use msf60_utils::MSFUtils;
 use std::cmp::Ordering;
 
@@ -31,7 +31,7 @@ pub fn analyze_buffer(buffer: &str) -> Vec<String> {
                 ));
                 res.push(str_datetime(
                     &rdt,
-                    str_weekday(rdt.get_weekday()),
+                    str_weekday(rdt.get_weekday(), 0),
                     rdt.get_dst(),
                 ));
                 res.push(format!(" DUT1={}\n", str_i8(msf.get_dut1())));
@@ -121,29 +121,6 @@ fn str_bits(buffer: &[char], minute_length: u8) -> String {
         }
     }
     bits
-}
-
-/// Return a textual representation of the weekday, Sunday-Saturday or ? for None.
-///
-/// # Arguments
-/// * `weekday` - optional weekday to stringify
-fn str_weekday(weekday: Option<u8>) -> String {
-    String::from(match weekday {
-        Some(0) => "Sunday",
-        Some(1) => "Monday",
-        Some(2) => "Tuesday",
-        Some(3) => "Wednesday",
-        Some(4) => "Thursday",
-        Some(5) => "Friday",
-        Some(6) => "Saturday",
-        None => "?",
-        _ => {
-            panic!(
-                "msf::str_weekday(): impossible weekday 'Some({})'",
-                weekday.unwrap()
-            );
-        }
-    })
 }
 
 /// Return a string representation of the given value or ? for None.
