@@ -70,14 +70,14 @@ fn append_bits(msf: &mut MSFUtils, c: char, buffer: &mut [char]) {
         // 4 is the 500ms long BOM marker
         msf.set_current_bit_a(match c {
             '0' | '2' => Some(false),
-            '1' | '3' => Some(true),
-            '4' | '_' => None,
+            '1' | '3' | '4' => Some(true),
+            '_' => None,
             _ => panic!("msf::append_bits(): impossible character '{c}'"),
         });
         msf.set_current_bit_b(match c {
             '0' | '1' => Some(false),
-            '2' | '3' => Some(true),
-            '4' | '_' => None,
+            '2' | '3' | '4' => Some(true),
+            '_' => None,
             _ => panic!("msf::append_bits(): impossible character '{c}'"),
         });
     }
