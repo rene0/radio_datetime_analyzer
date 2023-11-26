@@ -4,9 +4,9 @@ version = 3
 
 [[package]]
 name = "dcf77_utils"
-version = "0.5.0"
+version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "824d8617af2b569a01b5498c76efa9dca0acba748d4b339d5fbe3c7e28cb4cfb"
+checksum = "2eb8ecb2c2aaef60f96b20e4adb8c9741ad3d6989a63e43991a1837f8a9a5cde"
 dependencies = [
  "radio_datetime_utils",
 ]
@@ -22,7 +22,7 @@ dependencies = [
 
 [[package]]
 name = "radio_datetime_analyzer"
-version = "0.1.3"
+version = "0.1.4"
 dependencies = [
  "dcf77_utils",
  "msf60_utils",
