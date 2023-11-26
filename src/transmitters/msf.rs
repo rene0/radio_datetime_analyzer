@@ -309,8 +309,8 @@ mod tests {
         assert_eq!(msf.get_current_bit_b(), Some(true));
         msf.increase_second();
         append_bits(&mut msf, '4', &mut buffer); // BOM
-        assert_eq!(msf.get_current_bit_a(), None);
-        assert_eq!(msf.get_current_bit_a(), None);
+        assert_eq!(msf.get_current_bit_a(), Some(true));
+        assert_eq!(msf.get_current_bit_a(), Some(true));
         assert_eq!(buffer[0..7], ['0', '1', '_', '2', '\n', '3', '4']);
     }
 
