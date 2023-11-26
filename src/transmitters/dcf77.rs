@@ -25,7 +25,7 @@ pub fn analyze_buffer(buffer: &str) -> Vec<String> {
                 dcf77.force_new_minute(); // (this, next) = (next, new_next)
                 let rdt = dcf77.get_radio_datetime();
                 res.push(format!(
-                    "first_minute={} second={} this_minute_length={} next_minute_length={}\n",
+                    "first_minute={} seconds={} this_minute_length={} next_minute_length={}\n",
                     dcf77.get_first_minute(),
                     actual_len,
                     dcf77.get_this_minute_length(),
@@ -271,7 +271,7 @@ mod tests {
                 "0 00000000000000 0 001 0 1 0001101 1 110001 1 100011 101 01001 10011001 1\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("99-12-31 Friday 23:58 [winter]"),
             String::from(" [] []\n"),
@@ -281,7 +281,7 @@ mod tests {
                 "0 00000000000000 0 001 0 1 1001101 0 110001 1 100011 101 01001 10011001 1\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("99-12-31 Friday 23:59 [winter]"),
             String::from(" [] []\n"),
@@ -291,7 +291,7 @@ mod tests {
                 "0 00000000000000 0 001 0 1 0000000 0 000000 0 100000 011 10000 00000000 0\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("00-01-01 Saturday 00:00 [winter]"), // y2k OK
             String::from(" [] []\n"),
@@ -301,7 +301,7 @@ mod tests {
                 "0 00000000000000 0 001 0 1 1000000 1 000000 0 100000 011 10000 00000000 0\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("00-01-01 Saturday 00:01 [winter]"),
             String::from(" [] []\n"),
@@ -314,7 +314,7 @@ mod tests {
                 "0 00110110100111 0 010 0 1 1010110 0 100010 0 100110 110 00001 10001000 0\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("11-10-19 Wednesday 11:35 [jump,winter]"), // "unexpected" DST jump as there was we skipped the announcement.
             String::from(" [] []\n"),
@@ -330,7 +330,7 @@ mod tests {
                 "0 01110010011110 0 010 0 1 0110110 0 100010 0 100110 110 00001 10001000 0\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("11-10-19 Wednesday 11:36 [jump,winter]"),
             String::from(" [] []\n"),
@@ -340,7 +340,7 @@ mod tests {
                 "0 00111100101011 0 010 0 1 1110110 _ ______ _ ______ ___ _____ ________ _\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("11-10-19 Wednesday 11:37 [jump,winter]"),
             String::from(" [] []\n"),
@@ -353,7 +353,7 @@ mod tests {
                 "0 00000001110001 0 010 0 1 1010001 1 100010 0 100110 110 00001 10001000 0\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("11-10-19 Wednesday 11:45 [jump,winter]"),
             String::from(" [] []\n"),
@@ -364,7 +364,7 @@ mod tests {
                 "0 01010100000011 0 010 0 1 0110001 1 100010 0 100110 110 00001 10001000 0\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("11-10-19 Wednesday 11:46 [jump,winter]"),
             String::from(" [] []\n"),
@@ -374,7 +374,7 @@ mod tests {
                 "0 00011000100101 0 010 0 1 1110001 0 100010 0 100110 110 00001 10001000 0\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("11-10-19 Wednesday 11:47 [jump,winter]"),
             String::from(" [] []\n"),
@@ -384,7 +384,7 @@ mod tests {
                 "0 00011011000001 0 010 0 1 0001001 0 100010 0 100110 110 00001 10001000 0\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("11-10-19 Wednesday 11:48 [jump,winter]"),
             String::from(" [] []\n"),
@@ -394,7 +394,7 @@ mod tests {
                 "0 01000100010010 0 010 0 1 _______ _ ______ _ ______ ___ _____ ________ _\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("11-10-19 Wednesday 11:49 [jump,winter]"),
             String::from(" [] []\n"),
@@ -407,7 +407,7 @@ mod tests {
                 "0 00101000101010 0 010 0 1 1110101 1 100010 0 100110 110 00001 10001000 0\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("11-10-19 Wednesday 11:57 [jump,winter]"),
             String::from(" [] []\n"),
@@ -418,7 +418,7 @@ mod tests {
                 "0 01010100111111 0 010 0 1 0001101 1 100010 0 100110 110 00001 10001000 0\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("11-10-19 Wednesday 11:58 [jump,winter]"),
             String::from(" [] []\n"),
@@ -431,7 +431,7 @@ mod tests {
                 "0 00110100000101 0 001 0 1 1001101 0 000000 0 111001 111 11000 10001000 1\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("11-03-27 Sunday 00:59 [winter]"),
             String::from(" [] []\n"),
@@ -445,7 +445,7 @@ mod tests {
                 "0 10010000101011 0 001 0 1 0000000 0 100000 1 111001 111 11000 10001000 1\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("11-03-27 Sunday 01:00 [winter]"),
             String::from(" [] []\n"),
@@ -455,7 +455,7 @@ mod tests {
                 "0 00010110001111 0 101 0 1 1000000 1 100000 1 111001 111 11000 10001000 1\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("11-03-27 Sunday 01:01 [announced,winter]"), // see bit 16
             String::from(" [] []\n"),
@@ -465,7 +465,7 @@ mod tests {
                 "0 01010000000001 0 101 0 1 0001101 1 100000 1 111001 111 11000 10001000 1\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("11-03-27 Sunday 01:58 [announced,winter]"),
             String::from(" [] []\n"),
@@ -476,7 +476,7 @@ mod tests {
                 "0 00010011100011 0 101 0 1 1001101 0 100000 1 111001 111 11000 10001000 1\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("11-03-27 Sunday 01:59 [announced,winter]"),
             String::from(" [] []\n"),
@@ -486,7 +486,7 @@ mod tests {
                 "0 01100111010010 0 110 0 1 0000000 0 110000 0 111001 111 11000 10001000 1\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("11-03-27 Sunday 03:00 [processed,summer]"), // DST switch OK
             String::from(" [] []\n"),
@@ -496,7 +496,7 @@ mod tests {
                 "0 00000010100111 0 010 0 1 1000000 1 110000 0 111001 111 11000 10001000 1\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("11-03-27 Sunday 03:01 [summer]"),
             String::from(" [] []\n"),
@@ -506,7 +506,7 @@ mod tests {
                 "0 00010000110001 0 010 0 1 0100000 1 110000 0 111001 111 11000 10001000 1\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("11-03-27 Sunday 03:02 [summer]"),
             String::from(" [] []\n"),
@@ -519,7 +519,7 @@ mod tests {
                 "0 10110101111011 0 010 1 1 0010101 1 100000 1 100000 111 11100 01001000 1\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("12-07-01 Sunday 01:54 [summer]"),
             String::from(" [] []\n"), // not trusting bit 19 yet...
@@ -534,7 +534,7 @@ mod tests {
                 "0 00011100111000 0 010 1 1 1010101 0 100000 1 100000 111 11100 01001000 1\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("12-07-01 Sunday 01:55 [summer]"),
             String::from(" [announced] []\n"), // leap second coming...
@@ -544,7 +544,7 @@ mod tests {
                 "0 01010011100001 0 010 1 1 0110101 0 100000 1 100000 111 11100 01001000 1\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("12-07-01 Sunday 01:56 [summer]"),
             String::from(" [announced] []\n"),
@@ -554,7 +554,7 @@ mod tests {
                 "0 11100000111000 0 010 1 1 1110101 1 100000 1 100000 111 11100 01001000 1\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("12-07-01 Sunday 01:57 [summer]"),
             String::from(" [announced] []\n"),
@@ -564,7 +564,7 @@ mod tests {
                 "0 00111110100001 0 010 1 1 0001101 1 100000 1 100000 111 11100 01001000 1\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("12-07-01 Sunday 01:58 [summer]"),
             String::from(" [announced] []\n"),
@@ -574,7 +574,7 @@ mod tests {
                 "0 11101000101101 0 010 1 1 1001101 0 100000 1 100000 111 11100 01001000 1\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=61\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=61\n",
             ),
             String::from("12-07-01 Sunday 01:59 [summer]"),
             String::from(" [announced] []\n"),
@@ -584,7 +584,7 @@ mod tests {
                 "0 00011011111101 0 010 1 1 0000000 0 010000 1 100000 111 11100 01001000 1 1\n",
             ),
             String::from(
-                "first_minute=false second=61 this_minute_length=61 next_minute_length=60\n",
+                "first_minute=false seconds=61 this_minute_length=61 next_minute_length=60\n",
             ),
             String::from("12-07-01 Sunday 02:00 [summer]"),
             String::from(" [processed,one] []\n"), // leap second OK, artificially set to 1
@@ -594,7 +594,7 @@ mod tests {
                 "0 01001010111101 0 010 0 1 1000000 1 010000 1 100000 111 11100 01001000 1\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("12-07-01 Sunday 02:01 [summer]"),
             String::from(" [] []\n"),
@@ -604,7 +604,7 @@ mod tests {
                 "0 01001110011101 0 010 0 1 0100000 1 010000 1 100000 111 11100 01001000 1\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("12-07-01 Sunday 02:02 [summer]"),
             String::from(" [] []\n"),
@@ -617,7 +617,7 @@ mod tests {
                 "0 11001100110011 0 010 0 1 1001101 0 100000 1 000011 111 00001 10001000 0\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("11-10-30 Sunday 01:59 [summer]"),
             String::from(" [] []\n"),
@@ -632,7 +632,7 @@ mod tests {
                 "0 11100110000011 0 010 0 1 0000000 0 010000 1 000011 111 00001 10001000 0\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("11-10-30 Sunday 02:00 [summer]"),
             String::from(" [] []\n"),
@@ -642,7 +642,7 @@ mod tests {
                 "0 01010010100010 0 110 0 1 1000000 1 010000 1 000011 111 00001 10001000 0\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("11-10-30 Sunday 02:01 [announced,summer]"), // change to normal time coming up...
             String::from(" [] []\n"),
@@ -652,7 +652,7 @@ mod tests {
                 "0 10101001010101 0 110 0 1 0100000 1 010000 1 000011 111 00001 10001000 0\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("11-10-30 Sunday 02:02 [announced,summer]"),
             String::from(" [] []\n"),
@@ -662,7 +662,7 @@ mod tests {
                 "0 10010001011111 0 110 0 1 1100000 0 010000 1 000011 111 00001 10001000 0\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("11-10-30 Sunday 02:03 [announced,summer]"),
             String::from(" [] []\n"),
@@ -672,7 +672,7 @@ mod tests {
                 "0 00010100110010 0 110 0 1 0001101 1 010000 1 000011 111 00001 10001000 0\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("11-10-30 Sunday 02:58 [announced,summer]"),
             String::from(" [] []\n"),
@@ -683,7 +683,7 @@ mod tests {
                 "0 10100000001100 0 110 0 1 1001101 0 010000 1 000011 111 00001 10001000 0\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("11-10-30 Sunday 02:59 [announced,summer]"),
             String::from(" [] []\n"),
@@ -693,7 +693,7 @@ mod tests {
                 "0 10111000011110 0 101 0 1 0000000 0 010000 1 000011 111 00001 10001000 0\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("11-10-30 Sunday 02:00 [processed,winter]"), // change to normal time OK
             String::from(" [] []\n"),
@@ -703,7 +703,7 @@ mod tests {
                 "0 01010010000010 0 001 0 1 1000000 1 010000 1 000011 111 00001 10001000 0\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("11-10-30 Sunday 02:01 [winter]"),
             String::from(" [] []\n"),
@@ -713,7 +713,7 @@ mod tests {
                 "0 00010101110111 0 001 0 1 0100000 1 010000 1 000011 111 00001 10001000 0\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("11-10-30 Sunday 02:02 [winter]"),
             String::from(" [] []\n"),
@@ -726,7 +726,7 @@ mod tests {
                 "0 00000000000000 0 001 0 1 0000110 0 110001 1 100011 101 01001 10011001 1\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("99-12-31 Friday 23:30 [winter]"),
             String::from(" [] []\n"),
@@ -752,7 +752,7 @@ mod tests {
                 "0 00000000000000 0 001 0 1 1100110 0 110001 1 100011 101 01001 10011001 1\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("99-12-31 Friday 23:33 [winter]"),
             String::from(" [] []\n"),
@@ -766,7 +766,7 @@ mod tests {
                 "0 00110010000110 0 010 0 1 0110100 1 001000 1 010000 011 00100 10001000 0\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("11-04-02 Saturday 04:16 [jump,winter]"), // unannounced DST change
             String::from(" [] []\n"),
@@ -782,7 +782,7 @@ mod tests {
                 "0 11001111010101 0 010 0 1 1110100 0 001000 1 010000 011 00100 10001000 0\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("11-04-02 Saturday 04:17 [jump,winter]"),
             String::from(" [] []\n"),
@@ -792,7 +792,7 @@ mod tests {
                 "0 01000111100010 1 010 0 1 0001100 0 001000 1 010000 011 00100 10001000 0\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("11-04-02 Saturday 04:18 [jump,winter]"),
             String::from(" [] [call]\n"), // bit 15 set!
@@ -802,7 +802,7 @@ mod tests {
                 "0 01010000010101 1 010 0 1 1001100 1 001000 1 010000 011 00100 10001000 0\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("11-04-02 Saturday 04:19 [jump,winter]"),
             String::from(" [] [call]\n"),
@@ -812,7 +812,7 @@ mod tests {
                 "0 00011111010000 1 010 0 1 0000010 1 001000 1 010000 011 00100 10001000 0\n",
             ),
             String::from(
-                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("11-04-02 Saturday 04:20 [jump,winter]"),
             String::from(" [] [call]\n"),
