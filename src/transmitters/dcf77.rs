@@ -1,12 +1,12 @@
 use crate::{str_datetime, str_jumps, str_weekday};
-use dcf77_utils::DCF77Utils;
+use dcf77_utils::{DCF77Utils, DecodeType};
 
 /// Analyze a DCF77 logfile, return the input with the results interleaved.
 ///
 /// # Arguments
 /// `buffer` - the buffer containing the DCF77 logfile
 pub fn analyze_buffer(buffer: &str) -> Vec<String> {
-    let mut dcf77 = DCF77Utils::default();
+    let mut dcf77 = DCF77Utils::new(DecodeType::LogFile);
     let mut res = Vec::new();
     let mut bits = String::from("");
     for c in buffer.chars() {
@@ -15,12 +15,7 @@ pub fn analyze_buffer(buffer: &str) -> Vec<String> {
         }
         append_bit(&mut dcf77, c);
         bits.push_str(&str_bit(&dcf77, c));
-        if c == '\n' {
-            // force-feed the missing EOM bit
-            dcf77.set_current_bit(None);
-            dcf77.increase_second();
-        }
-        let actual_len = dcf77.get_second();
+        let actual_len = dcf77.get_second() + 1;
         let wanted_len = dcf77.get_next_minute_length();
         if c == '\n' {
             res.push(bits.clone());
@@ -209,6 +204,7 @@ fn str_check_bits(dcf77: &DCF77Utils) -> Vec<&str> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use dcf77_utils::DecodeType;
     use radio_datetime_utils::{LEAP_ANNOUNCED, LEAP_MISSING, LEAP_PROCESSED};
 
     #[test]
@@ -275,7 +271,7 @@ mod tests {
                 "0 00000000000000 0 001 0 1 0001101 1 110001 1 100011 101 01001 10011001 1\n",
             ),
             String::from(
-                "first_minute=true second=60 this_minute_length=60 next_minute_length=60\n",
+                "first_minute=false second=60 this_minute_length=60 next_minute_length=60\n",
             ),
             String::from("99-12-31 Friday 23:58 [winter]"),
             String::from(" [] []\n"),
@@ -745,12 +741,12 @@ mod tests {
             String::from(
                 "0 00000000000000 0 001 0 1 1000110 1 110001 1 100011 101 01001 10011001 1 0\n",
             ),
-            String::from("Minute is 0 seconds instead of 60 seconds long\n"), // OK, 61 bits
+            String::from("Minute is 1 seconds instead of 60 seconds long\n"), // OK, 61 bits
             String::from("\n"),
             String::from(
                 "0 00000000000000 0 001 0 1 0100110 1 110001 1 100011 101 01001 10011001 1 00\n",
             ),
-            String::from("Minute is 1 seconds instead of 60 seconds long\n"), // 62 mod 61 == 1
+            String::from("Minute is 2 seconds instead of 60 seconds long\n"), // 62 mod 60 == 2
             String::from("\n"),
             String::from(
                 "0 00000000000000 0 001 0 1 1100110 0 110001 1 100011 101 01001 10011001 1\n",
@@ -894,13 +890,13 @@ mod tests {
     #[test]
     #[should_panic]
     fn test_append_bit_panic() {
-        let mut dcf77 = DCF77Utils::default();
+        let mut dcf77 = DCF77Utils::new(DecodeType::LogFile);
         append_bit(&mut dcf77, '!');
     }
 
     #[test]
     fn test_append_bits_bunch() {
-        let mut dcf77 = DCF77Utils::default();
+        let mut dcf77 = DCF77Utils::new(DecodeType::LogFile);
         append_bit(&mut dcf77, '0');
         assert_eq!(dcf77.get_current_bit(), Some(false));
         dcf77.increase_second();
