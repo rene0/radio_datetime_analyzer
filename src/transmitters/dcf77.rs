@@ -22,7 +22,6 @@ pub fn analyze_buffer(buffer: &str) -> Vec<String> {
             bits.clear();
             if actual_len == wanted_len {
                 dcf77.decode_time();
-                dcf77.force_new_minute(); // (this, next) = (next, new_next)
                 let rdt = dcf77.get_radio_datetime();
                 res.push(format!(
                     "first_minute={} seconds={} this_minute_length={} next_minute_length={}\n",
@@ -58,8 +57,8 @@ pub fn analyze_buffer(buffer: &str) -> Vec<String> {
                 res.push(format!(
                     "Minute is {actual_len} seconds instead of {wanted_len} seconds long\n"
                 ));
-                dcf77.force_new_minute();
             }
+            dcf77.force_new_minute(); // (this, next) = (next, new_next)
             res.push(String::from("\n"));
         }
         dcf77.increase_second();

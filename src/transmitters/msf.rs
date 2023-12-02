@@ -21,7 +21,6 @@ pub fn analyze_buffer(buffer: &str) -> Vec<String> {
             if actual_len == wanted_len {
                 res.push(str_bits(&msf_buffer, wanted_len));
                 msf.decode_time(); // does not affect msf.get_minute_length()
-                msf.force_new_minute();
                 let rdt = msf.get_radio_datetime();
                 res.push(format!(
                     "first_minute={} seconds={} minute_length={}\n",
@@ -48,8 +47,8 @@ pub fn analyze_buffer(buffer: &str) -> Vec<String> {
                 res.push(format!(
                     "Minute is {actual_len} seconds instead of {wanted_len} seconds long\n"
                 ));
-                msf.force_new_minute();
             }
+            msf.force_new_minute();
             res.push(String::from("\n"));
         }
         msf.increase_second();
