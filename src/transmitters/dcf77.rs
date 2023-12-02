@@ -13,7 +13,7 @@ pub fn analyze_buffer(buffer: &str) -> Vec<String> {
         if !['0', '1', '_', '\n'].contains(&c) {
             continue;
         }
-        append_bit(&mut dcf77, c);
+        append_bit(&mut dcf77, c); // does nothing with newline
         bits.push_str(&str_bit(&dcf77, c));
         let actual_len = dcf77.get_second() + 1;
         let wanted_len = dcf77.get_next_minute_length();

@@ -14,7 +14,7 @@ pub fn analyze_buffer(buffer: &str) -> Vec<String> {
         if !['0', '1', '2', '3', '4', '_', '\n'].contains(&c) {
             continue;
         }
-        append_bits(&mut msf, c, &mut msf_buffer);
+        append_bits(&mut msf, c, &mut msf_buffer); // does nothing with newline except adding it to buffer
         let actual_len = msf.get_second();
         let wanted_len = msf.get_minute_length();
         if c == '\n' {
