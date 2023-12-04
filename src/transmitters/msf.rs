@@ -315,8 +315,8 @@ mod tests {
         assert_eq!(msf.get_current_bit_a(), Some(true));
         assert_eq!(msf.get_current_bit_b(), Some(true));
         assert_eq!(buffer[0..6], ['0', '1', '_', '2', ' ', '3']); // space because \n is not inserted
-        // a '4' calls force_past_new_minute() which resets the second counter to 0
         msf.increase_second();
+        // a '4' calls force_past_new_minute() which resets the second counter to 0
         append_bits(&mut msf, '4', &mut buffer); // BOM
         assert_eq!(msf.get_current_bit_a(), Some(true));
         assert_eq!(msf.get_current_bit_a(), Some(true));
