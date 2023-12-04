@@ -14,9 +14,10 @@ pub fn analyze_buffer(buffer: &str) -> Vec<String> {
         if !['0', '1', '2', '3', '4', '_', '\n'].contains(&c) {
             continue;
         }
-        append_bits(&mut msf, c, &mut msf_buffer); // does nothing with newline except adding it to buffer
-        let actual_len = msf.get_second();
+        append_bits(&mut msf, c, &mut msf_buffer); // does nothing with newline except adding it to msf_buffer
+        let actual_len = msf.get_second() + 1;
         let wanted_len = msf.get_minute_length();
+        let eom = msf.end_of_minute_marker_present();
         if c == '\n' {
             if actual_len == wanted_len {
                 res.push(str_bits(&msf_buffer, wanted_len));
@@ -34,7 +35,7 @@ pub fn analyze_buffer(buffer: &str) -> Vec<String> {
                     rdt.get_dst(),
                 ));
                 res.push(format!(" DUT1={}\n", str_i8(msf.get_dut1())));
-                if !msf.end_of_minute_marker_present(false) {
+                if !eom {
                     res.push(String::from("End-of-minute marker absent\n"));
                 }
                 for parity in str_parities(&msf) {
@@ -51,7 +52,9 @@ pub fn analyze_buffer(buffer: &str) -> Vec<String> {
             msf.force_new_minute();
             res.push(String::from("\n"));
         }
-        msf.increase_second();
+        if !eom {
+            msf.increase_second();
+        }
     }
     res
 }
@@ -61,26 +64,30 @@ pub fn analyze_buffer(buffer: &str) -> Vec<String> {
 ///
 /// # Arguments
 /// * `msf` - the structure to append the bit pair to
-/// * `c` - the bit pair to add. The newline is there to force a new minute, it is a not a bit pair
-///         in itself.
+/// * `c` - the bit pair to add. The newline is there for showing a new minute, it is a not
+///         a bit pair in itself.
 /// * `buffer` - buffer storing the bits for later displaying
 fn append_bits(msf: &mut MSFUtils, c: char, buffer: &mut [char]) {
     if c != '\n' {
-        // 4 is the 500ms long BOM marker
-        msf.set_current_bit_a(match c {
-            '0' | '2' => Some(false),
-            '1' | '3' | '4' => Some(true),
-            '_' => None,
-            _ => panic!("msf::append_bits(): impossible character '{c}'"),
-        });
-        msf.set_current_bit_b(match c {
-            '0' | '1' => Some(false),
-            '2' | '3' | '4' => Some(true),
-            '_' => None,
-            _ => panic!("msf::append_bits(): impossible character '{c}'"),
-        });
+        if c == '4' {
+            msf.force_past_new_minute();
+        } else {
+            // 4 is the 500ms long BOM marker
+            msf.set_current_bit_a(match c {
+                '0' | '2' => Some(false),
+                '1' | '3' => Some(true),
+                '_' => None,
+                _ => panic!("msf::append_bits(): impossible character '{c}'"),
+            });
+            msf.set_current_bit_b(match c {
+                '0' | '1' => Some(false),
+                '2' | '3' => Some(true),
+                '_' => None,
+                _ => panic!("msf::append_bits(): impossible character '{c}'"),
+            });
+        }
     }
-    buffer[msf.get_second() as usize] = c;
+    buffer[msf.get_second() as usize + (c == '\n') as usize] = c;
 }
 
 /// Return a string version of the all the bit pairs (or the EOM newline) in this minute.
@@ -188,7 +195,7 @@ mod tests {
 ";
         let analyzed = vec![
             String::from("4 00000000 22000000 00100000 00011 101000 110 100011 1011001 01133110\n"),
-            String::from("first_minute=true seconds=60 minute_length=60\n"),
+            String::from("first_minute=false seconds=60 minute_length=60\n"),
             String::from("20-03-28 Saturday 23:59 [winter]"),
             String::from(" DUT1=-2\n"),
             String::from("\n"),
@@ -306,11 +313,13 @@ mod tests {
         append_bits(&mut msf, '3', &mut buffer);
         assert_eq!(msf.get_current_bit_a(), Some(true));
         assert_eq!(msf.get_current_bit_b(), Some(true));
+        assert_eq!(buffer[0..6], ['0', '1', '_', '2', ' ', '3']); // space because \n is not inserted
+        // a '4' calls force_past_new_minute() which resets the second counter to 0
         msf.increase_second();
         append_bits(&mut msf, '4', &mut buffer); // BOM
         assert_eq!(msf.get_current_bit_a(), Some(true));
         assert_eq!(msf.get_current_bit_a(), Some(true));
-        assert_eq!(buffer[0..7], ['0', '1', '_', '2', '\n', '3', '4']);
+        assert_eq!(buffer[0..6], ['4', '1', '_', '2', ' ', '3']); // space because \n is not inserted
     }
 
     #[test]
