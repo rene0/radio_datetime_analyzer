@@ -15,18 +15,18 @@ pub fn analyze_buffer(buffer: &str) -> Vec<String> {
             continue;
         }
         append_bits(&mut msf, c, &mut msf_buffer); // does nothing with newline except adding it to msf_buffer
-        let actual_len = msf.get_second() + 1;
+        let last_second = msf.get_second();
         let wanted_len = msf.get_minute_length();
         let eom = msf.end_of_minute_marker_present();
         if c == '\n' {
-            if actual_len == wanted_len {
+            if last_second + 1 == wanted_len {
                 res.push(str_bits(&msf_buffer, wanted_len));
                 msf.decode_time(); // does not affect msf.get_minute_length()
                 let rdt = msf.get_radio_datetime();
                 res.push(format!(
                     "first_minute={} seconds={} minute_length={}\n",
                     msf.get_first_minute(),
-                    actual_len,
+                    last_second + 1,
                     wanted_len
                 ));
                 res.push(str_datetime(
@@ -46,7 +46,7 @@ pub fn analyze_buffer(buffer: &str) -> Vec<String> {
                 }
             } else {
                 res.push(format!(
-                    "Minute is {actual_len} seconds instead of {wanted_len} seconds long\n"
+                    "Minute is {last_second} seconds instead of {wanted_len} seconds long\n"
                 ));
             }
             msf.force_new_minute();
