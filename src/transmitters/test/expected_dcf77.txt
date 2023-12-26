@@ -1,0 +1,328 @@
+0 00000000000000 0 001 0 1 0001101 1 110001 1 100011 101 01001 10011001 1
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+99-12-31 Friday 23:58 [winter] [] []
+Third-party buffer=0x0000
+
+0 00000000000000 0 001 0 1 1001101 0 110001 1 100011 101 01001 10011001 1
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+99-12-31 Friday 23:59 [winter] [] []
+Third-party buffer=0x0000
+
+0 00000000000000 0 001 0 1 0000000 0 000000 0 100000 011 10000 00000000 0
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+00-01-01 Saturday 00:00 [winter] [] []
+// y2k OK
+Third-party buffer=0x0000
+
+0 00000000000000 0 001 0 1 1000000 1 000000 0 100000 011 10000 00000000 0
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+00-01-01 Saturday 00:01 [winter] [] []
+Third-party buffer=0x0000
+
+
+Minute is 1 seconds instead of 60 seconds long
+
+0 00110110100111 0 010 0 1 1010110 0 100010 0 100110 110 00001 10001000 0
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+11-10-19 Wednesday 11:35 [jump,winter] [] []
+// "unexpected" DST jump as there was we skipped the announcement.
+Third-party buffer=0x396c
+Year jumped
+Month jumped
+Day-of-month jumped
+Day-of-week jumped
+Hour jumped
+Minute jumped
+
+0 01110010011110 0 010 0 1 0110110 0 100010 0 100110 110 00001 10001000 0
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+11-10-19 Wednesday 11:36 [jump,winter] [] []
+Third-party buffer=0x1e4e
+
+0 00111100101011 0 010 0 1 1110110 _ ______ _ ______ ___ _____ ________ _
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+11-10-19 Wednesday 11:37 [jump,winter] [] []
+Third-party buffer=0x353c
+Minute parity undetermined
+// missing data to calculate parities
+Hour parity undetermined
+// all _ bits are None
+Date parity undetermined
+
+0 00000001110001 0 010 0 1 1010001 1 100010 0 100110 110 00001 10001000 0
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+11-10-19 Wednesday 11:45 [jump,winter] [] []
+Third-party buffer=0x2380
+Minute jumped
+// signal restored
+
+0 01010100000011 0 010 0 1 0110001 1 100010 0 100110 110 00001 10001000 0
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+11-10-19 Wednesday 11:46 [jump,winter] [] []
+Third-party buffer=0x302a
+
+0 00011000100101 0 010 0 1 1110001 0 100010 0 100110 110 00001 10001000 0
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+11-10-19 Wednesday 11:47 [jump,winter] [] []
+Third-party buffer=0x2918
+
+0 00011011000001 0 010 0 1 0001001 0 100010 0 100110 110 00001 10001000 0
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+11-10-19 Wednesday 11:48 [jump,winter] [] []
+Third-party buffer=0x20d8
+
+0 01000100010010 0 010 0 1 _______ _ ______ _ ______ ___ _____ ________ _
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+11-10-19 Wednesday 11:49 [jump,winter] [] []
+Third-party buffer=0x1222
+Minute parity undetermined
+// signal lost (again)
+Hour parity undetermined
+Date parity undetermined
+
+0 00101000101010 0 010 0 1 1110101 1 100010 0 100110 110 00001 10001000 0
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+11-10-19 Wednesday 11:57 [jump,winter] [] []
+Third-party buffer=0x1514
+Minute jumped
+// signal restored (again)
+
+0 01010100111111 0 010 0 1 0001101 1 100010 0 100110 110 00001 10001000 0
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+11-10-19 Wednesday 11:58 [jump,winter] [] []
+Third-party buffer=0x3f2a
+
+
+Minute is 1 seconds instead of 60 seconds long
+
+0 00110100000101 0 001 0 1 1001101 0 000000 0 111001 111 11000 10001000 1
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+11-03-27 Sunday 00:59 [winter] [] []
+Third-party buffer=0x282c
+Month jumped
+Day-of-month jumped
+Day-of-week jumped
+Hour jumped
+
+0 10010000101011 0 001 0 1 0000000 0 100000 1 111001 111 11000 10001000 1
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+11-03-27 Sunday 01:00 [winter] [] []
+Third-party buffer=0x3509
+
+0 00010110001111 0 101 0 1 1000000 1 100000 1 111001 111 11000 10001000 1
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+11-03-27 Sunday 01:01 [announced,winter] [] []
+// see bit 16
+Third-party buffer=0x3c68
+
+0 01010000000001 0 101 0 1 0001101 1 100000 1 111001 111 11000 10001000 1
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+11-03-27 Sunday 01:58 [announced,winter] [] []
+Third-party buffer=0x200a
+Minute jumped
+// skip boring stuff...
+
+0 00010011100011 0 101 0 1 1001101 0 100000 1 111001 111 11000 10001000 1
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+11-03-27 Sunday 01:59 [announced,winter] [] []
+Third-party buffer=0x31c8
+
+0 01100111010010 0 110 0 1 0000000 0 110000 0 111001 111 11000 10001000 1
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+11-03-27 Sunday 03:00 [processed,summer] [] []
+// DST switch OK
+Third-party buffer=0x12e6
+
+0 00000010100111 0 010 0 1 1000000 1 110000 0 111001 111 11000 10001000 1
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+11-03-27 Sunday 03:01 [summer] [] []
+Third-party buffer=0x3940
+
+0 00010000110001 0 010 0 1 0100000 1 110000 0 111001 111 11000 10001000 1
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+11-03-27 Sunday 03:02 [summer] [] []
+Third-party buffer=0x2308
+
+
+Minute is 1 seconds instead of 60 seconds long
+
+0 10110101111011 0 010 1 1 0010101 1 100000 1 100000 111 11100 01001000 1
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+12-07-01 Sunday 01:54 [summer] [] []
+// not trusting bit 19 yet...
+Third-party buffer=0x37ad
+Year jumped
+Month jumped
+Day-of-month jumped
+Hour jumped
+Minute jumped
+
+0 00011100111000 0 010 1 1 1010101 0 100000 1 100000 111 11100 01001000 1
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+12-07-01 Sunday 01:55 [summer] [announced] []
+// leap second coming...
+Third-party buffer=0x0738
+
+0 01010011100001 0 010 1 1 0110101 0 100000 1 100000 111 11100 01001000 1
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+12-07-01 Sunday 01:56 [summer] [announced] []
+Third-party buffer=0x21ca
+
+0 11100000111000 0 010 1 1 1110101 1 100000 1 100000 111 11100 01001000 1
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+12-07-01 Sunday 01:57 [summer] [announced] []
+Third-party buffer=0x0707
+
+0 00111110100001 0 010 1 1 0001101 1 100000 1 100000 111 11100 01001000 1
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+12-07-01 Sunday 01:58 [summer] [announced] []
+Third-party buffer=0x217c
+
+0 11101000101101 0 010 1 1 1001101 0 100000 1 100000 111 11100 01001000 1
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=61
+12-07-01 Sunday 01:59 [summer] [announced] []
+Third-party buffer=0x2d17
+
+0 00011011111101 0 010 1 1 0000000 0 010000 1 100000 111 11100 01001000 1 1
+first_minute=false seconds=61 this_minute_length=61 next_minute_length=60
+12-07-01 Sunday 02:00 [summer] [processed,one] []
+// leap second OK, artificially set to 1
+Third-party buffer=0x2fd8
+
+0 01001010111101 0 010 0 1 1000000 1 010000 1 100000 111 11100 01001000 1
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+12-07-01 Sunday 02:01 [summer] [] []
+Third-party buffer=0x2f52
+
+0 01001110011101 0 010 0 1 0100000 1 010000 1 100000 111 11100 01001000 1
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+12-07-01 Sunday 02:02 [summer] [] []
+Third-party buffer=0x2e72
+
+
+Minute is 1 seconds instead of 60 seconds long
+
+0 11001100110011 0 010 0 1 1001101 0 100000 1 000011 111 00001 10001000 0
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+11-10-30 Sunday 01:59 [summer] [] []
+Third-party buffer=0x3333
+Year jumped
+Month jumped
+Day-of-month jumped
+Hour jumped
+Minute jumped
+
+0 11100110000011 0 010 0 1 0000000 0 010000 1 000011 111 00001 10001000 0
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+11-10-30 Sunday 02:00 [summer] [] []
+Third-party buffer=0x3067
+
+0 01010010100010 0 110 0 1 1000000 1 010000 1 000011 111 00001 10001000 0
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+11-10-30 Sunday 02:01 [announced,summer] [] []
+// change to normal time coming up...
+Third-party buffer=0x114a
+
+0 10101001010101 0 110 0 1 0100000 1 010000 1 000011 111 00001 10001000 0
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+11-10-30 Sunday 02:02 [announced,summer] [] []
+Third-party buffer=0x2a95
+
+0 10010001011111 0 110 0 1 1100000 0 010000 1 000011 111 00001 10001000 0
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+11-10-30 Sunday 02:03 [announced,summer] [] []
+Third-party buffer=0x3e89
+
+0 00010100110010 0 110 0 1 0001101 1 010000 1 000011 111 00001 10001000 0
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+11-10-30 Sunday 02:58 [announced,summer] [] []
+Third-party buffer=0x1328
+Minute jumped
+// skip some time...
+
+0 10100000001100 0 110 0 1 1001101 0 010000 1 000011 111 00001 10001000 0
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+11-10-30 Sunday 02:59 [announced,summer] [] []
+Third-party buffer=0x0c05
+
+0 10111000011110 0 101 0 1 0000000 0 010000 1 000011 111 00001 10001000 0
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+11-10-30 Sunday 02:00 [processed,winter] [] []
+// change to normal time OK
+Third-party buffer=0x1e1d
+
+0 01010010000010 0 001 0 1 1000000 1 010000 1 000011 111 00001 10001000 0
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+11-10-30 Sunday 02:01 [winter] [] []
+Third-party buffer=0x104a
+
+0 00010101110111 0 001 0 1 0100000 1 010000 1 000011 111 00001 10001000 0
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+11-10-30 Sunday 02:02 [winter] [] []
+Third-party buffer=0x3ba8
+
+
+Minute is 1 seconds instead of 60 seconds long
+
+0 00000000000000 0 001 0 1 0000110 0 110001 1 100011 101 01001 10011001 1
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+99-12-31 Friday 23:30 [winter] [] []
+Third-party buffer=0x0000
+Year jumped
+Month jumped
+Day-of-month jumped
+Day-of-week jumped
+Hour jumped
+Minute jumped
+
+0 00000000000000 0 001 0 1 1000110 1 110001 1 100011 101 01001 10011001 1 0
+Minute is 1 seconds instead of 60 seconds long
+// OK, 61 bits
+
+0 00000000000000 0 001 0 1 0100110 1 110001 1 100011 101 01001 10011001 1 00
+Minute is 2 seconds instead of 60 seconds long
+// 62 mod 60 == 2
+
+0 00000000000000 0 001 0 1 1100110 0 110001 1 100011 101 01001 10011001 1
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+99-12-31 Friday 23:33 [winter] [] []
+Third-party buffer=0x0000
+Minute jumped
+// not really, but we lost track
+
+
+Minute is 1 seconds instead of 60 seconds long
+
+0 00110010000110 0 010 0 1 0110100 1 001000 1 010000 011 00100 10001000 0
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+11-04-02 Saturday 04:16 [jump,winter] [] []
+// unannounced DST change
+Third-party buffer=0x184c
+Year jumped
+Month jumped
+Day-of-month jumped
+Day-of-week jumped
+Hour jumped
+Minute jumped
+
+0 11001111010101 0 010 0 1 1110100 0 001000 1 010000 011 00100 10001000 0
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+11-04-02 Saturday 04:17 [jump,winter] [] []
+Third-party buffer=0x2af3
+
+0 01000111100010 1 010 0 1 0001100 0 001000 1 010000 011 00100 10001000 0
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+11-04-02 Saturday 04:18 [jump,winter] [] [call]
+// bit 15 set!
+Third-party buffer=0x11e2
+
+0 01010000010101 1 010 0 1 1001100 1 001000 1 010000 011 00100 10001000 0
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+11-04-02 Saturday 04:19 [jump,winter] [] [call]
+Third-party buffer=0x2a0a
+
+0 00011111010000 1 010 0 1 0000010 1 001000 1 010000 011 00100 10001000 0
+first_minute=false seconds=60 this_minute_length=60 next_minute_length=60
+11-04-02 Saturday 04:20 [jump,winter] [] [call]
+Third-party buffer=0x02f8
+
