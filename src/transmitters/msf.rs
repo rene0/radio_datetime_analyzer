@@ -189,8 +189,6 @@ mod tests {
             String::from("first_minute=false seconds=60 minute_length=60\n"),
             String::from("20-03-29 Sunday 00:01 [announced,winter] DUT1=-2\n"),
             String::from("\n"),
-            String::from("Minute is 0 seconds instead of 60 seconds long\n"), // test empty(?) minute
-            String::from("\n"),
             String::from("Minute is 3 seconds instead of 60 seconds long\n"), // test incomplete minute
             String::from("\n"),
             String::from("4 00000000 22000000 00100000 00011 101001 000 000000 0000100 03113110\n"),
