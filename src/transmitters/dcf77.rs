@@ -30,13 +30,9 @@ pub fn analyze_buffer(buffer: &str) -> Vec<String> {
                     dcf77.get_this_minute_length(),
                     dcf77.get_next_minute_length()
                 ));
-                res.push(str_datetime(
-                    &rdt,
-                    str_weekday(rdt.get_weekday(), 7),
-                    rdt.get_dst(),
-                ));
                 res.push(format!(
-                    " [{}] [{}]\n",
+                    "{} [{}] [{}]\n",
+                    str_datetime(&rdt, str_weekday(rdt.get_weekday(), 7), rdt.get_dst()),
                     leap_second_info(rdt.get_leap_second(), dcf77.get_leap_second_is_one()),
                     str_call_bit(&dcf77),
                 ));
@@ -216,8 +212,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("99-12-31 Friday 23:58 [winter]"),
-            String::from(" [] []\n"),
+            String::from("99-12-31 Friday 23:58 [winter] [] []\n"),
             String::from("Third-party buffer=0x0000\n"),
             String::from("\n"),
             String::from(
@@ -226,8 +221,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("99-12-31 Friday 23:59 [winter]"),
-            String::from(" [] []\n"),
+            String::from("99-12-31 Friday 23:59 [winter] [] []\n"),
             String::from("Third-party buffer=0x0000\n"),
             String::from("\n"),
             String::from(
@@ -236,8 +230,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("00-01-01 Saturday 00:00 [winter]"), // y2k OK
-            String::from(" [] []\n"),
+            String::from("00-01-01 Saturday 00:00 [winter] [] []\n"), // y2k OK
             String::from("Third-party buffer=0x0000\n"),
             String::from("\n"),
             String::from(
@@ -246,8 +239,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("00-01-01 Saturday 00:01 [winter]"),
-            String::from(" [] []\n"),
+            String::from("00-01-01 Saturday 00:01 [winter] [] []\n"),
             String::from("Third-party buffer=0x0000\n"),
             String::from("\n"),
             String::from("\n"),
@@ -259,8 +251,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("11-10-19 Wednesday 11:35 [jump,winter]"), // "unexpected" DST jump as there was we skipped the announcement.
-            String::from(" [] []\n"),
+            String::from("11-10-19 Wednesday 11:35 [jump,winter] [] []\n"), // "unexpected" DST jump as there was we skipped the announcement.
             String::from("Third-party buffer=0x396c\n"),
             String::from("Year jumped\n"),
             String::from("Month jumped\n"),
@@ -275,8 +266,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("11-10-19 Wednesday 11:36 [jump,winter]"),
-            String::from(" [] []\n"),
+            String::from("11-10-19 Wednesday 11:36 [jump,winter] [] []\n"),
             String::from("Third-party buffer=0x1e4e\n"),
             String::from("\n"),
             String::from(
@@ -285,8 +275,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("11-10-19 Wednesday 11:37 [jump,winter]"),
-            String::from(" [] []\n"),
+            String::from("11-10-19 Wednesday 11:37 [jump,winter] [] []\n"),
             String::from("Third-party buffer=0x353c\n"),
             String::from("Minute parity undetermined\n"), // missing data to calculate parities
             String::from("Hour parity undetermined\n"),   // all _ bits are None
@@ -298,8 +287,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("11-10-19 Wednesday 11:45 [jump,winter]"),
-            String::from(" [] []\n"),
+            String::from("11-10-19 Wednesday 11:45 [jump,winter] [] []\n"),
             String::from("Third-party buffer=0x2380\n"),
             String::from("Minute jumped\n"), // signal restored
             String::from("\n"),
@@ -309,8 +297,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("11-10-19 Wednesday 11:46 [jump,winter]"),
-            String::from(" [] []\n"),
+            String::from("11-10-19 Wednesday 11:46 [jump,winter] [] []\n"),
             String::from("Third-party buffer=0x302a\n"),
             String::from("\n"),
             String::from(
@@ -319,8 +306,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("11-10-19 Wednesday 11:47 [jump,winter]"),
-            String::from(" [] []\n"),
+            String::from("11-10-19 Wednesday 11:47 [jump,winter] [] []\n"),
             String::from("Third-party buffer=0x2918\n"),
             String::from("\n"),
             String::from(
@@ -329,8 +315,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("11-10-19 Wednesday 11:48 [jump,winter]"),
-            String::from(" [] []\n"),
+            String::from("11-10-19 Wednesday 11:48 [jump,winter] [] []\n"),
             String::from("Third-party buffer=0x20d8\n"),
             String::from("\n"),
             String::from(
@@ -339,8 +324,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("11-10-19 Wednesday 11:49 [jump,winter]"),
-            String::from(" [] []\n"),
+            String::from("11-10-19 Wednesday 11:49 [jump,winter] [] []\n"),
             String::from("Third-party buffer=0x1222\n"),
             String::from("Minute parity undetermined\n"), // signal lost (again)
             String::from("Hour parity undetermined\n"),
@@ -352,8 +336,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("11-10-19 Wednesday 11:57 [jump,winter]"),
-            String::from(" [] []\n"),
+            String::from("11-10-19 Wednesday 11:57 [jump,winter] [] []\n"),
             String::from("Third-party buffer=0x1514\n"),
             String::from("Minute jumped\n"), // signal restored (again)
             String::from("\n"),
@@ -363,8 +346,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("11-10-19 Wednesday 11:58 [jump,winter]"),
-            String::from(" [] []\n"),
+            String::from("11-10-19 Wednesday 11:58 [jump,winter] [] []\n"),
             String::from("Third-party buffer=0x3f2a\n"),
             String::from("\n"),
             String::from("\n"),
@@ -376,8 +358,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("11-03-27 Sunday 00:59 [winter]"),
-            String::from(" [] []\n"),
+            String::from("11-03-27 Sunday 00:59 [winter] [] []\n"),
             String::from("Third-party buffer=0x282c\n"),
             String::from("Month jumped\n"),
             String::from("Day-of-month jumped\n"),
@@ -390,8 +371,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("11-03-27 Sunday 01:00 [winter]"),
-            String::from(" [] []\n"),
+            String::from("11-03-27 Sunday 01:00 [winter] [] []\n"),
             String::from("Third-party buffer=0x3509\n"),
             String::from("\n"),
             String::from(
@@ -400,8 +380,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("11-03-27 Sunday 01:01 [announced,winter]"), // see bit 16
-            String::from(" [] []\n"),
+            String::from("11-03-27 Sunday 01:01 [announced,winter] [] []\n"), // see bit 16
             String::from("Third-party buffer=0x3c68\n"),
             String::from("\n"),
             String::from(
@@ -410,8 +389,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("11-03-27 Sunday 01:58 [announced,winter]"),
-            String::from(" [] []\n"),
+            String::from("11-03-27 Sunday 01:58 [announced,winter] [] []\n"),
             String::from("Third-party buffer=0x200a\n"),
             String::from("Minute jumped\n"), // skip boring stuff...
             String::from("\n"),
@@ -421,8 +399,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("11-03-27 Sunday 01:59 [announced,winter]"),
-            String::from(" [] []\n"),
+            String::from("11-03-27 Sunday 01:59 [announced,winter] [] []\n"),
             String::from("Third-party buffer=0x31c8\n"),
             String::from("\n"),
             String::from(
@@ -431,8 +408,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("11-03-27 Sunday 03:00 [processed,summer]"), // DST switch OK
-            String::from(" [] []\n"),
+            String::from("11-03-27 Sunday 03:00 [processed,summer] [] []\n"), // DST switch OK
             String::from("Third-party buffer=0x12e6\n"),
             String::from("\n"),
             String::from(
@@ -441,8 +417,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("11-03-27 Sunday 03:01 [summer]"),
-            String::from(" [] []\n"),
+            String::from("11-03-27 Sunday 03:01 [summer] [] []\n"),
             String::from("Third-party buffer=0x3940\n"),
             String::from("\n"),
             String::from(
@@ -451,8 +426,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("11-03-27 Sunday 03:02 [summer]"),
-            String::from(" [] []\n"),
+            String::from("11-03-27 Sunday 03:02 [summer] [] []\n"),
             String::from("Third-party buffer=0x2308\n"),
             String::from("\n"),
             String::from("\n"),
@@ -464,8 +438,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("12-07-01 Sunday 01:54 [summer]"),
-            String::from(" [] []\n"), // not trusting bit 19 yet...
+            String::from("12-07-01 Sunday 01:54 [summer] [] []\n"), // not trusting bit 19 yet...
             String::from("Third-party buffer=0x37ad\n"),
             String::from("Year jumped\n"),
             String::from("Month jumped\n"),
@@ -479,8 +452,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("12-07-01 Sunday 01:55 [summer]"),
-            String::from(" [announced] []\n"), // leap second coming...
+            String::from("12-07-01 Sunday 01:55 [summer] [announced] []\n"), // leap second coming...
             String::from("Third-party buffer=0x0738\n"),
             String::from("\n"),
             String::from(
@@ -489,8 +461,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("12-07-01 Sunday 01:56 [summer]"),
-            String::from(" [announced] []\n"),
+            String::from("12-07-01 Sunday 01:56 [summer] [announced] []\n"),
             String::from("Third-party buffer=0x21ca\n"),
             String::from("\n"),
             String::from(
@@ -499,8 +470,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("12-07-01 Sunday 01:57 [summer]"),
-            String::from(" [announced] []\n"),
+            String::from("12-07-01 Sunday 01:57 [summer] [announced] []\n"),
             String::from("Third-party buffer=0x0707\n"),
             String::from("\n"),
             String::from(
@@ -509,8 +479,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("12-07-01 Sunday 01:58 [summer]"),
-            String::from(" [announced] []\n"),
+            String::from("12-07-01 Sunday 01:58 [summer] [announced] []\n"),
             String::from("Third-party buffer=0x217c\n"),
             String::from("\n"),
             String::from(
@@ -519,8 +488,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=61\n",
             ),
-            String::from("12-07-01 Sunday 01:59 [summer]"),
-            String::from(" [announced] []\n"),
+            String::from("12-07-01 Sunday 01:59 [summer] [announced] []\n"),
             String::from("Third-party buffer=0x2d17\n"),
             String::from("\n"),
             String::from(
@@ -529,8 +497,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=61 this_minute_length=61 next_minute_length=60\n",
             ),
-            String::from("12-07-01 Sunday 02:00 [summer]"),
-            String::from(" [processed,one] []\n"), // leap second OK, artificially set to 1
+            String::from("12-07-01 Sunday 02:00 [summer] [processed,one] []\n"), // leap second OK, artificially set to 1
             String::from("Third-party buffer=0x2fd8\n"),
             String::from("\n"),
             String::from(
@@ -539,8 +506,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("12-07-01 Sunday 02:01 [summer]"),
-            String::from(" [] []\n"),
+            String::from("12-07-01 Sunday 02:01 [summer] [] []\n"),
             String::from("Third-party buffer=0x2f52\n"),
             String::from("\n"),
             String::from(
@@ -549,8 +515,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("12-07-01 Sunday 02:02 [summer]"),
-            String::from(" [] []\n"),
+            String::from("12-07-01 Sunday 02:02 [summer] [] []\n"),
             String::from("Third-party buffer=0x2e72\n"),
             String::from("\n"),
             String::from("\n"),
@@ -562,8 +527,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("11-10-30 Sunday 01:59 [summer]"),
-            String::from(" [] []\n"),
+            String::from("11-10-30 Sunday 01:59 [summer] [] []\n"),
             String::from("Third-party buffer=0x3333\n"),
             String::from("Year jumped\n"),
             String::from("Month jumped\n"),
@@ -577,8 +541,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("11-10-30 Sunday 02:00 [summer]"),
-            String::from(" [] []\n"),
+            String::from("11-10-30 Sunday 02:00 [summer] [] []\n"),
             String::from("Third-party buffer=0x3067\n"),
             String::from("\n"),
             String::from(
@@ -587,8 +550,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("11-10-30 Sunday 02:01 [announced,summer]"), // change to normal time coming up...
-            String::from(" [] []\n"),
+            String::from("11-10-30 Sunday 02:01 [announced,summer] [] []\n"), // change to normal time coming up...
             String::from("Third-party buffer=0x114a\n"),
             String::from("\n"),
             String::from(
@@ -597,8 +559,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("11-10-30 Sunday 02:02 [announced,summer]"),
-            String::from(" [] []\n"),
+            String::from("11-10-30 Sunday 02:02 [announced,summer] [] []\n"),
             String::from("Third-party buffer=0x2a95\n"),
             String::from("\n"),
             String::from(
@@ -607,8 +568,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("11-10-30 Sunday 02:03 [announced,summer]"),
-            String::from(" [] []\n"),
+            String::from("11-10-30 Sunday 02:03 [announced,summer] [] []\n"),
             String::from("Third-party buffer=0x3e89\n"),
             String::from("\n"),
             String::from(
@@ -617,8 +577,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("11-10-30 Sunday 02:58 [announced,summer]"),
-            String::from(" [] []\n"),
+            String::from("11-10-30 Sunday 02:58 [announced,summer] [] []\n"),
             String::from("Third-party buffer=0x1328\n"),
             String::from("Minute jumped\n"), // skip some time...
             String::from("\n"),
@@ -628,8 +587,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("11-10-30 Sunday 02:59 [announced,summer]"),
-            String::from(" [] []\n"),
+            String::from("11-10-30 Sunday 02:59 [announced,summer] [] []\n"),
             String::from("Third-party buffer=0x0c05\n"),
             String::from("\n"),
             String::from(
@@ -638,8 +596,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("11-10-30 Sunday 02:00 [processed,winter]"), // change to normal time OK
-            String::from(" [] []\n"),
+            String::from("11-10-30 Sunday 02:00 [processed,winter] [] []\n"), // change to normal time OK
             String::from("Third-party buffer=0x1e1d\n"),
             String::from("\n"),
             String::from(
@@ -648,8 +605,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("11-10-30 Sunday 02:01 [winter]"),
-            String::from(" [] []\n"),
+            String::from("11-10-30 Sunday 02:01 [winter] [] []\n"),
             String::from("Third-party buffer=0x104a\n"),
             String::from("\n"),
             String::from(
@@ -658,8 +614,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("11-10-30 Sunday 02:02 [winter]"),
-            String::from(" [] []\n"),
+            String::from("11-10-30 Sunday 02:02 [winter] [] []\n"),
             String::from("Third-party buffer=0x3ba8\n"),
             String::from("\n"),
             String::from("\n"),
@@ -671,8 +626,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("99-12-31 Friday 23:30 [winter]"),
-            String::from(" [] []\n"),
+            String::from("99-12-31 Friday 23:30 [winter] [] []\n"),
             String::from("Third-party buffer=0x0000\n"),
             String::from("Year jumped\n"),
             String::from("Month jumped\n"),
@@ -697,8 +651,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("99-12-31 Friday 23:33 [winter]"),
-            String::from(" [] []\n"),
+            String::from("99-12-31 Friday 23:33 [winter] [] []\n"),
             String::from("Third-party buffer=0x0000\n"),
             String::from("Minute jumped\n"), // not really, but we lost track
             String::from("\n"),
@@ -711,8 +664,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("11-04-02 Saturday 04:16 [jump,winter]"), // unannounced DST change
-            String::from(" [] []\n"),
+            String::from("11-04-02 Saturday 04:16 [jump,winter] [] []\n"), // unannounced DST change
             String::from("Third-party buffer=0x184c\n"),
             String::from("Year jumped\n"),
             String::from("Month jumped\n"),
@@ -727,8 +679,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("11-04-02 Saturday 04:17 [jump,winter]"),
-            String::from(" [] []\n"),
+            String::from("11-04-02 Saturday 04:17 [jump,winter] [] []\n"),
             String::from("Third-party buffer=0x2af3\n"),
             String::from("\n"),
             String::from(
@@ -737,8 +688,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("11-04-02 Saturday 04:18 [jump,winter]"),
-            String::from(" [] [call]\n"), // bit 15 set!
+            String::from("11-04-02 Saturday 04:18 [jump,winter] [] [call]\n"), // bit 15 set!
             String::from("Third-party buffer=0x11e2\n"),
             String::from("\n"),
             String::from(
@@ -747,8 +697,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("11-04-02 Saturday 04:19 [jump,winter]"),
-            String::from(" [] [call]\n"),
+            String::from("11-04-02 Saturday 04:19 [jump,winter] [] [call]\n"),
             String::from("Third-party buffer=0x2a0a\n"),
             String::from("\n"),
             String::from(
@@ -757,8 +706,7 @@ mod tests {
             String::from(
                 "first_minute=false seconds=60 this_minute_length=60 next_minute_length=60\n",
             ),
-            String::from("11-04-02 Saturday 04:20 [jump,winter]"),
-            String::from(" [] [call]\n"),
+            String::from("11-04-02 Saturday 04:20 [jump,winter] [] [call]\n"),
             String::from("Third-party buffer=0x02f8\n"),
             String::from("\n"),
         ];
