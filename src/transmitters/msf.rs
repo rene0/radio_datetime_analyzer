@@ -175,7 +175,6 @@ mod tests {
     use super::*;
 
     #[test]
-    #[ignore] // does not handle leap seconds or broken EOM markers properly, needs fix in msf60_utils
     fn test_analyze_logfile() {
         const LOG: &str = include_str!("sample_msf.log");
         let analyzed = vec![
