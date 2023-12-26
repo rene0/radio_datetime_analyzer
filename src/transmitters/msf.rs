@@ -176,8 +176,8 @@ mod tests {
 
     #[test]
     fn test_analyze_logfile() {
-        const LOG: &str = include_str!("sample_msf.log");
-        let analyzed: Vec<String> = include_str!("expected_msf.txt")
+        const LOG: &str = include_str!("test/sample_msf.log");
+        let analyzed: Vec<String> = include_str!("test/expected_msf.txt")
             .lines()
             .map(String::from)
             .filter(|x| !x.starts_with("//"))

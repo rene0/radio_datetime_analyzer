@@ -204,7 +204,7 @@ mod tests {
 
     #[test]
     fn test_analyze_logfile() {
-        const LOG: &str = include_str!("sample_dcf77.log");
+        const LOG: &str = include_str!("test/sample_dcf77.log");
         let analyzed = vec![
             String::from(
                 "0 00000000000000 0 001 0 1 0001101 1 110001 1 100011 101 01001 10011001 1\n",
