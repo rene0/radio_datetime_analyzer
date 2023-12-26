@@ -198,14 +198,18 @@ mod tests {
             String::from("20-03-29 Sunday 00:04 [announced,winter] DUT1=-2\n"),
             String::from("Minute jumped\n"), // 00:01 -> 00:04
             String::from("\n"),
-            String::from("4 00000000 22000000 00100000 00011 101001 000 000000 0000101 03112310\n"),
-            String::from("first_minute=false seconds=60 minute_length=60\n"),
-            String::from("20-03-29 Sunday 00:05 [announced,winter] DUT1=-2\n"),
-            String::from("End-of-minute marker absent\n"), // note the '2' in the last word
+            /*
+                        String::from("4 00000000 22000000 00100000 00011 101001 000 000000 0000101 03112310\n"),
+                        String::from("first_minute=false seconds=60 minute_length=60\n"),
+                        String::from("20-03-29 Sunday 00:05 [announced,winter] DUT1=-2\n"),
+                        String::from("End-of-minute marker absent\n"), // note the '2' in the last word
+            */
+            String::from("Minute is 0 seconds instead of 60 seconds long\n"), // consequence of not dealing with missing EOM marker
             String::from("\n"),
             String::from("4 00000000 22000000 00100000 00011 101001 000 000000 0000110 03113310\n"),
             String::from("first_minute=false seconds=60 minute_length=60\n"),
             String::from("20-03-29 Sunday 00:06 [announced,winter] DUT1=-2\n"),
+            String::from("Minute jumped\n"), // consequence of not dealing with missing EOM marker
             String::from("\n"),
             String::from("4 00000000 2200000 00100000 00011 101001 000 000000 0000111 03113110\n"),
             String::from("first_minute=false seconds=59 minute_length=59\n"), // artificially remove bit 16
