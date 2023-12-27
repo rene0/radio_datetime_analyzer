@@ -198,21 +198,17 @@ fn str_check_bits(dcf77: &DCF77Utils) -> Vec<&str> {
 
 #[cfg(test)]
 mod tests {
-    use std::ops::Add;
     use super::*;
+    use crate::transmitters::tests::parse_expected_log;
     use dcf77_utils::DecodeType;
     use radio_datetime_utils::{LEAP_ANNOUNCED, LEAP_MISSING, LEAP_PROCESSED};
 
     #[test]
     fn test_analyze_logfile() {
-        const LOG: &str = include_str!("test/sample_dcf77.log");
-        let analyzed: Vec<String> = include_str!("test/expected_dcf77.txt")
-            .lines()
-            .map(String::from)
-            .filter(|x| !x.starts_with("//"))
-            .map(|x| x.add("\n"))
-            .collect();
-        assert_eq!(analyze_buffer(LOG), analyzed);
+        assert_eq!(
+            analyze_buffer(include_str!("test/sample_dcf77.log")),
+            parse_expected_log(include_str!("test/expected_dcf77.txt"))
+        );
     }
 
     const LE_EMPTY: &str = "";

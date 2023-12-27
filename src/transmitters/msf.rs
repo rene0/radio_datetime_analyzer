@@ -172,18 +172,14 @@ fn str_parities(msf: &MSFUtils) -> Vec<&str> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::ops::Add;
+    use crate::transmitters::tests::parse_expected_log;
 
     #[test]
     fn test_analyze_logfile() {
-        const LOG: &str = include_str!("test/sample_msf.log");
-        let analyzed: Vec<String> = include_str!("test/expected_msf.txt")
-            .lines()
-            .map(String::from)
-            .filter(|x| !x.starts_with("//"))
-            .map(|x| x.add("\n"))
-            .collect();
-        assert_eq!(analyze_buffer(LOG), analyzed);
+        assert_eq!(
+            analyze_buffer(include_str!("test/sample_msf.log")),
+            parse_expected_log(include_str!("test/expected_msf.txt"))
+        );
     }
 
     #[test]
