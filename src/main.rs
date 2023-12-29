@@ -3,9 +3,9 @@ use std::{env, fs};
 
 fn main() {
     let mut cmd_args = env::args();
-    let program_name = cmd_args.next();
+    let program_name = cmd_args.next().unwrap();
     if cmd_args.len() != 2 {
-        eprintln!("Usage: {} station_name logfile", program_name.unwrap());
+        eprintln!("Usage: {} station_name logfile", program_name);
         return;
     }
     let station_name = cmd_args.next().unwrap().to_lowercase();
