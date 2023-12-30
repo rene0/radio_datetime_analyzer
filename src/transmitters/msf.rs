@@ -197,29 +197,29 @@ mod tests {
         append_bits(&mut msf, '0', &mut buffer);
         assert_eq!(msf.get_current_bit_a(), Some(false));
         assert_eq!(msf.get_current_bit_b(), Some(false));
-        msf.increase_second();
+        assert_eq!(msf.increase_second(), true);
         append_bits(&mut msf, '1', &mut buffer);
         assert_eq!(msf.get_current_bit_a(), Some(true));
         assert_eq!(msf.get_current_bit_b(), Some(false));
-        msf.increase_second();
+        assert_eq!(msf.increase_second(), true);
         append_bits(&mut msf, '_', &mut buffer); // broken bit
         assert_eq!(msf.get_current_bit_a(), None);
         assert_eq!(msf.get_current_bit_b(), None);
-        msf.increase_second();
+        assert_eq!(msf.increase_second(), true);
         append_bits(&mut msf, '2', &mut buffer);
         assert_eq!(msf.get_current_bit_a(), Some(false));
         assert_eq!(msf.get_current_bit_b(), Some(true));
-        msf.increase_second();
+        assert_eq!(msf.increase_second(), true);
         append_bits(&mut msf, '\n', &mut buffer);
         // not added to msf.bit_*, this normally forces a new minute
         assert_eq!(msf.get_current_bit_a(), None);
         assert_eq!(msf.get_current_bit_b(), None);
-        msf.increase_second();
+        assert_eq!(msf.increase_second(), true);
         append_bits(&mut msf, '3', &mut buffer);
         assert_eq!(msf.get_current_bit_a(), Some(true));
         assert_eq!(msf.get_current_bit_b(), Some(true));
         assert_eq!(buffer[0..6], ['0', '1', '_', '2', ' ', '3']); // space because \n is not inserted
-        msf.increase_second();
+        assert_eq!(msf.increase_second(), true);
         // a '4' calls force_past_new_minute() which resets the second counter to 0
         append_bits(&mut msf, '4', &mut buffer); // BOM
         assert_eq!(msf.get_current_bit_a(), Some(true));

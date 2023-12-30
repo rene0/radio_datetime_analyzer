@@ -288,16 +288,16 @@ mod tests {
         let mut dcf77 = DCF77Utils::new(DecodeType::LogFile);
         append_bit(&mut dcf77, '0');
         assert_eq!(dcf77.get_current_bit(), Some(false));
-        dcf77.increase_second();
+        assert_eq!(dcf77.increase_second(), true);
         append_bit(&mut dcf77, '\n');
         // this normally forces a new minute
         assert_eq!(dcf77.get_current_bit(), None);
-        dcf77.increase_second();
+        assert_eq!(dcf77.increase_second(), true);
         append_bit(&mut dcf77, '1');
         assert_eq!(dcf77.get_current_bit(), Some(true));
-        dcf77.increase_second();
+        assert_eq!(dcf77.increase_second(), true);
         append_bit(&mut dcf77, '_'); // broken/empty bit
         assert_eq!(dcf77.get_current_bit(), None);
-        dcf77.increase_second();
+        assert_eq!(dcf77.increase_second(), true);
     }
 }
