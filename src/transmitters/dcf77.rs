@@ -57,7 +57,9 @@ pub fn analyze_buffer(buffer: &str) -> Vec<String> {
             dcf77.force_new_minute(); // (this, next) = (next, new_next)
             res.push(String::from("\n"));
         }
-        dcf77.increase_second();
+        if !dcf77.increase_second() {
+            res.push(String::from("increase_second() == false\n")); // shown _before_ the bit buffer and analysis
+        }
     }
     res
 }

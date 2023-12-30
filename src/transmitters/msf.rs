@@ -51,8 +51,8 @@ pub fn analyze_buffer(buffer: &str) -> Vec<String> {
             msf.force_new_minute();
             res.push(String::from("\n"));
         }
-        if !eom {
-            msf.increase_second();
+        if !eom && !msf.increase_second() {
+            res.push(String::from("increase_second() == false\n")); // shown _before_ the bit buffer and analysis
         }
     }
     res

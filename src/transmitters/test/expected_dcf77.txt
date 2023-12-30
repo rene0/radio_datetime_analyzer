@@ -275,10 +275,12 @@ Day-of-week jumped
 Hour jumped
 Minute jumped
 
+increase_second() == false
 0 00000000000000 0 001 0 1 1000110 1 110001 1 100011 101 01001 10011001 1 0
 Minute is 1 seconds instead of 60 seconds long
 // OK, 61 bits
 
+increase_second() == false
 0 00000000000000 0 001 0 1 0100110 1 110001 1 100011 101 01001 10011001 1 00
 Minute is 2 seconds instead of 60 seconds long
 // 62 mod 60 == 2

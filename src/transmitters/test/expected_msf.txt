@@ -25,6 +25,7 @@ Minute jumped
 // first_minute=false seconds=60 minute_length=60
 // 20-03-29 Sunday 00:05 [announced,winter] DUT1=-2
 // End-of-minute marker absent // note the '2' in the last word
+increase_second() == false
 Minute is 0 seconds instead of 60 seconds long
 // consequence of not dealing with missing EOM marker
 
