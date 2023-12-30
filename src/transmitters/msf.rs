@@ -9,7 +9,7 @@ use std::cmp::Ordering;
 pub fn analyze_buffer(buffer: &str) -> Vec<String> {
     let mut msf = MSFUtils::default();
     let mut res = Vec::new();
-    let mut msf_buffer = [' '; msf60_utils::BIT_BUFFER_SIZE];
+    let mut msf_buffer = [' '; radio_datetime_utils::BIT_BUFFER_SIZE];
     for c in buffer.chars() {
         if !['0', '1', '2', '3', '4', '_', '\n'].contains(&c) {
             continue;
@@ -185,14 +185,14 @@ mod tests {
     #[test]
     #[should_panic]
     fn test_append_bits_panic() {
-        let mut buffer = [' '; msf60_utils::BIT_BUFFER_SIZE];
+        let mut buffer = [' '; radio_datetime_utils::BIT_BUFFER_SIZE];
         let mut msf = MSFUtils::default();
         append_bits(&mut msf, '!', &mut buffer);
     }
 
     #[test]
     fn test_append_bits_bunch() {
-        let mut buffer = [' '; msf60_utils::BIT_BUFFER_SIZE];
+        let mut buffer = [' '; radio_datetime_utils::BIT_BUFFER_SIZE];
         let mut msf = MSFUtils::default();
         append_bits(&mut msf, '0', &mut buffer);
         assert_eq!(msf.get_current_bit_a(), Some(false));
