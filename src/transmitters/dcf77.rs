@@ -21,7 +21,7 @@ pub fn analyze_buffer(buffer: &str) -> Vec<String> {
             res.push(bits.clone());
             bits.clear();
             if actual_len == wanted_len {
-                dcf77.decode_time();
+                dcf77.decode_time(false);
                 let rdt = dcf77.get_radio_datetime();
                 res.push(format!(
                     "first_minute={} seconds={} this_minute_length={} next_minute_length={}\n",

@@ -21,7 +21,7 @@ pub fn analyze_buffer(buffer: &str) -> Vec<String> {
         if c == '\n' {
             if last_second + 1 == wanted_len {
                 res.push(str_bits(&msf_buffer, wanted_len));
-                msf.decode_time(); // does not affect msf.get_minute_length()
+                msf.decode_time(false); // does not affect msf.get_minute_length()
                 let rdt = msf.get_radio_datetime();
                 res.push(format!(
                     "first_minute={} seconds={} minute_length={}\n",
